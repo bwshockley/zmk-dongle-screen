@@ -77,13 +77,13 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
         snprintf(transport_text, sizeof(transport_text), "#%s USB#", usb_color);
         lv_label_set_recolor(widget->transport_label, true);
         lv_obj_set_style_text_align(widget->transport_label, LV_TEXT_ALIGN_RIGHT, 0);
-        lv_label_set_text(widget->transport_label, LV_SYMBOL_USB "transport_text");
+        lv_label_set_text(widget->transport_label, LV_SYMBOL_USB + transport_text);
         break;
     case ZMK_TRANSPORT_BLE:
         snprintf(transport_text, sizeof(transport_text), "#%s BLE#", ble_color);
         lv_label_set_recolor(widget->transport_label, true);
         lv_obj_set_style_text_align(widget->transport_label, LV_TEXT_ALIGN_RIGHT, 0);
-        lv_label_set_text(widget->transport_label, LV_SYMBOL_BLUETOOTH "transport_text");
+        lv_label_set_text(widget->transport_label, LV_SYMBOL_BLUETOOTH + transport_text);
         char ble_text[12];
 
         snprintf(ble_text, sizeof(ble_text), "%d", state.active_profile_index + 1);
