@@ -74,7 +74,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        snprintf(transport_text, sizeof(transport_text), "#%s USB#, usb_color);
+        snprintf(transport_text, sizeof(transport_text), "#%s USB#", usb_color);
         lv_label_set_recolor(widget->transport_label, true);
         lv_obj_set_style_text_align(widget->transport_label, LV_TEXT_ALIGN_RIGHT, 0);
         lv_label_set_text(widget->transport_label, LV_SYMBOL_USB transport_text);
