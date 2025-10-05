@@ -17,6 +17,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/usb.h>
 #include <zmk/ble.h>
 #include <zmk/endpoints.h>
+#include <lvgl.h>
 
 #include "output_status.h"
 
@@ -54,7 +55,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     }
     else
     {
-        usb_color = "ffffff";
+        usb_color = "ffa500";
     }
 
     if (state.active_profile_connected == 1)
@@ -73,10 +74,10 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        snprintf(transport_text, sizeof(transport_text), "> #%s USB#\n#%s BLE#", usb_color, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "LV_SYMBOL_USB #%s USB#\n#%s BLE#", usb_color, ble_color);
         break;
     case ZMK_TRANSPORT_BLE:
-        snprintf(transport_text, sizeof(transport_text), "#%s USB#\n> #%s BLE#", usb_color, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "#%s USB#\nLV_SYMBOL_BLUETOOTH #%s BLE#", usb_color, ble_color);
         break;
     }
 
