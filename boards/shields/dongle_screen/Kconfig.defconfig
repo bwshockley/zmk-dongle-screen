@@ -60,6 +60,9 @@ choice LV_FONT_DEFAULT
     default LV_FONT_DEFAULT_MONTSERRAT_20
 endchoice
 
+config LV_FONT_MONTSERRAT_30
+    default y
+
 config LV_FONT_MONTSERRAT_40
     default y
 
