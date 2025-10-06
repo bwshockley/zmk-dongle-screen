@@ -14,9 +14,6 @@ static struct zmk_widget_output_status output_status_widget;
 #if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
 #include "widgets/layer_status.h"
 static struct zmk_widget_layer_status layer_status_widget;
-#endif
-
-#if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
 #include "widgets/layer_roller.h"
 static struct zmk_widget_layer_roller layer_roller_widget;
 #endif
