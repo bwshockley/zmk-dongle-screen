@@ -107,7 +107,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
                 ptr += strlen(ptr);
             }
 
-            if (layer_name && *layer_name) {
+            if (layer_name && *layer_name) { //is both valid and points to a non-empty string
 #if IS_ENABLED(CONFIG_LAYER_ROLLER_ALL_CAPS)
                 while (*layer_name) {
                     *ptr = toupper((unsigned char)*layer_name);
@@ -129,64 +129,24 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
         }
     }
 
-    lv_roller_set_options(widget->obj, layer_names_buffer, LV_ROLLER_MODE_INFINITE);
+    lv_roller_set_options(widget->obj, layer_names_buffer, LV_ROLLER_MODE_NORMAL);
 
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_bg_color(&style, lv_color_black());
     lv_style_set_text_color(&style, lv_color_white());
-    // lv_style_set_text_letter_space(&style, 2);
     lv_style_set_border_width(&style, 0);
     lv_style_set_pad_all(&style, 0);
-    // lv_obj_add_style(lv_scr_act(), &style, 0);
-
     lv_obj_add_style(widget->obj, &style, 0);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);
-    if (LV_PART_SELECTED == "Orange") {
-        lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffa500), LV_PART_SELECTED);
-    }
-    else if (LV_PART_SELECTED == "Green") {
-        lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x00ff00), LV_PART_SELECTED);
-    }
-    else {         
-        lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
-    }
-    // lv_obj_set_style_text_line_space(widget->obj, 20, LV_PART_SELECTED);
-    // lv_obj_set_style_text_line_space(widget->obj, 20, LV_PART_MAIN);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);        
+    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_40, LV_PART_MAIN);
-    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x909090), LV_PART_MAIN);
+    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x111111), LV_PART_MAIN);
     // lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, 0);
-
     lv_obj_add_event_cb(widget->obj, mask_event_cb, LV_EVENT_ALL, NULL);
-
-    // static lv_style_t style_roller;
-    // lv_style_init(&style_roller);
-    // lv_style_set_text_font(&style_roller, &SF_Compact_Text_Light_24);
-    // lv_style_set_text_letter_space(&style_roller, -0.5);
-    // lv_style_set_text_line_space(&style_roller, 20);
-    // lv_style_set_text_color(&style_roller, lv_color_hex(0x6b6b6b));
-    // lv_style_set_bg_color(&style_roller, lv_color_hex(0x050505));
-    // lv_style_set_bg_opa(&style_roller, 255);
-
-    // static lv_style_t style_roller_sel;
-    // lv_style_init(&style_roller_sel);
-    // lv_style_set_text_font(&style_roller_sel, &SF_Compact_Text_Semibold_28);
-    // lv_style_set_text_letter_space(&style_roller_sel, -0.5);
-    // lv_style_set_text_line_space(&style_roller_sel, 16);
-    // lv_style_set_text_color(&style_roller_sel, lv_color_hex(0xffffff));
-    // lv_style_set_bg_color(&style_roller_sel, lv_color_hex(0x1c1c1c));
-    // lv_style_set_bg_opa(&style_roller_sel, 255);
-
-    // lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, 0);
-    // lv_obj_add_style(widget->obj, &style_roller, LV_PART_MAIN);
-    // lv_obj_add_style(widget->obj, &style_roller_sel, LV_PART_SELECTED);
-    // lv_obj_set_style_radius(widget->obj, 20, LV_PART_MAIN);
-
-    lv_obj_set_style_anim_time(widget->obj, 100, 0);
-
+    lv_obj_set_style_anim_time(widget->obj, 300, 0);
     sys_slist_append(&widgets, &widget->node);
-
     widget_layer_roller_init();
     return 0;
 }
