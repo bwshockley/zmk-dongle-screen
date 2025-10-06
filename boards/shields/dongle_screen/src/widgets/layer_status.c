@@ -36,9 +36,13 @@ static void set_layer_symbol(lv_obj_t *label, struct layer_status_state state)
     else
     {
         char text[13] = {};
-
-        snprintf(text, sizeof(text), "%s", state.label);
-
+        if (state.label == "Orange") {
+            snprintf(text, sizeof(text), "#ffa500 %s", state.label);
+        } else if (state.label == "Green") {
+            snprintf(text, sizeof(text), "%s", state.label);
+        } else {
+            snprintf(text, sizeof(text), "%s", state.label);
+        }
         lv_label_set_text(label, text);
     }
 }
