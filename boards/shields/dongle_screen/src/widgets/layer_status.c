@@ -37,7 +37,7 @@ static void set_layer_symbol(lv_obj_t *label, struct layer_status_state state)
     {
         char text[13] = {};
 
-        snprintf(text, sizeof(text), "%s", state.label);
+        snprintf(text, sizeof(text), "#%s#", state.label);
 
         lv_label_set_text(label, text);
     }
@@ -66,7 +66,7 @@ int zmk_widget_layer_status_init(struct zmk_widget_layer_status *widget, lv_obj_
 {
     widget->obj = lv_label_create(parent);
 
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_40, 0);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, 0);
 
     sys_slist_append(&widgets, &widget->node);
 
