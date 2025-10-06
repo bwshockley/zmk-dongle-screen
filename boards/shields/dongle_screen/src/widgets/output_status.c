@@ -48,6 +48,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
 {
     const char *ble_color = "ffffff";
     const char *usb_color = "ffffff";
+    const char *inactive_color = "222222";
     char transport_text[50] = {};
     if (state.usb_is_hid_ready == 0)
     {
@@ -55,7 +56,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     }
     else
     {
-        usb_color = "ffa500";
+        usb_color = "ff5f1f";
     }
 
     if (state.active_profile_connected == 1)
@@ -71,24 +72,24 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
         ble_color = "ffffff";
     }
 
+    
+    char ble_text[12];
+    snprintf(ble_text, sizeof(ble_text), "%d", state.active_profile_index + 1);
+    
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        snprintf(transport_text, sizeof(transport_text), "#%s %s USB#\n#%s BLE#", usb_color, LV_SYMBOL_USB, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "#%s %s USB#\n#%s %s BLE %d#", usb_color, LV_SYMBOL_USB, inactive_color, LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
         break;
     case ZMK_TRANSPORT_BLE:
-        snprintf(transport_text, sizeof(transport_text), "#%s USB#\n#%s %s BLE#", usb_color, ble_color, LV_SYMBOL_BLUETOOTH);
+        snprintf(transport_text, sizeof(transport_text), "#%s %s USB#\n#%s %s BLE %d#", inactive_color, LV_SYMBOL_USB, ble_color, LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
         break;
     }
 
     lv_label_set_recolor(widget->transport_label, true);
     lv_obj_set_style_text_align(widget->transport_label, LV_TEXT_ALIGN_RIGHT, 0);
     lv_label_set_text(widget->transport_label, transport_text);
-
-    char ble_text[12];
-
-    snprintf(ble_text, sizeof(ble_text), "%d", state.active_profile_index + 1);
-    lv_label_set_text(widget->ble_label, ble_text);
+    /*lv_label_set_text(widget->ble_label, ble_text);*/
 }
 
 static void output_status_update_cb(struct output_status_state state)
