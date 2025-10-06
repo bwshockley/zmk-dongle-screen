@@ -141,7 +141,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);        
     lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_40, LV_PART_MAIN);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_30, LV_PART_MAIN);
     lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x111111), LV_PART_MAIN);
     // lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_add_event_cb(widget->obj, mask_event_cb, LV_EVENT_ALL, NULL);
