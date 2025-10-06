@@ -142,7 +142,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
 
     lv_obj_add_style(widget->obj, &style, 0);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(widget->obj, &FRAC_Regular_48, LV_PART_SELECTED);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);
     if (LV_PART_SELECTED == "Orange") {
         lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffa500), LV_PART_SELECTED);
     }
@@ -154,7 +154,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     }
     // lv_obj_set_style_text_line_space(widget->obj, 20, LV_PART_SELECTED);
     // lv_obj_set_style_text_line_space(widget->obj, 20, LV_PART_MAIN);
-    lv_obj_set_style_text_font(widget->obj, &FRAC_Thin_48, LV_PART_MAIN);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_40, LV_PART_MAIN);
     lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x909090), LV_PART_MAIN);
     // lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, 0);
 
