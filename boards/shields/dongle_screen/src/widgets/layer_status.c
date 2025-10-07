@@ -36,10 +36,10 @@ static void set_layer_symbol(lv_obj_t *label, struct layer_status_state state)
     else
     {
         char text[16] = {};
-        if (strcpm(state.label) == "Orange") {
+        if (strcmp(state.label,"Orange") !=0) {
             const char *layer_color = "ffa500";
             snprintf(text, sizeof(text), "#%s%s", layer_color, state.label);
-        } else if (strcmp(state.label) == "Green") {
+        } else if (strcmp(state.label,"Green") !=0) {
             const char *layer_color = "00ff00";
             snprintf(text, sizeof(text), "#%s%s", layer_color, state.label);
         } else {
