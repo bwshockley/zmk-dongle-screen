@@ -152,6 +152,12 @@ config DONGLE_SCREEN_WPM_ACTIVE
     help
       If the WPM Widget should be active or not
 
+config CONFIG_DONGLE_SCREEN_HID_INDICATORS_ACTIVE
+	bool "HID Indicators Widget active"
+	default y
+	help
+	  If the CAPSLOCK, NUMLOCK, SCROLLLOCK indicators should be active or not
+
 config DONGLE_SCREEN_MODIFIER_ACTIVE
     bool "Modifier Widget active"
     default y
