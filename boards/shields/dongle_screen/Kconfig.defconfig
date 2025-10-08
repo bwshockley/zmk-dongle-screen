@@ -152,7 +152,7 @@ config DONGLE_SCREEN_WPM_ACTIVE
     help
       If the WPM Widget should be active or not
 
-config CONFIG_DONGLE_SCREEN_HID_INDICATORS_ACTIVE
+config DONGLE_SCREEN_HID_INDICATORS_ACTIVE
 	bool "HID Indicators Widget active"
 	default y
 	help
