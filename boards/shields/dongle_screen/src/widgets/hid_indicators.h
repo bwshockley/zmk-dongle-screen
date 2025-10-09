@@ -10,8 +10,11 @@
 #include <zephyr/kernel.h>
 
 struct zmk_widget_hid_indicators {
+    lv_obj_t *cont;
+    lv_obj_t *caps_label;
+    lv_obj_t *num_label;
+    lv_obj_t *scroll_label;
     sys_snode_t node;
-    lv_obj_t *obj;
 };
 
 int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_obj_t *parent);
