@@ -1,81 +1,65 @@
-/*
- * Copyright (c) 2024 The ZMK Contributors
- *
- * SPDX-License-Identifier: MIT
- */
-
 #include <zephyr/kernel.h>
-#include <zephyr/bluetooth/services/bas.h>
-
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
-
 #include <zmk/display.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/hid_indicators_changed.h>
+#include <lvgl.h>
 
-#include "hid_indicators.h"
-
-#define LED_NLCK 0x01
-#define LED_CLCK 0x02
-#define LED_SLCK 0x04
-
-struct hid_indicators_state {    
-    uint8_t hid_indicators;
+struct hid_indicators_widget {
+    lv_obj_t *container;
+    lv_obj_t *caps_label;
+    lv_obj_t *num_label;
+    lv_obj_t *scroll_label;
 };
 
-static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
+static struct hid_indicators_widget indicators_widget;
 
-static void set_hid_indicators(lv_obj_t *label, struct hid_indicators_state state) {
-    char text[7] = {};
-    bool lock = false;
+static void update_indicators(bool caps, bool num, bool scroll) {
+    lv_color_t active_color = lv_palette_main(LV_PALETTE_GREEN);
+    lv_color_t inactive_color = lv_palette_main(LV_PALETTE_GREY);
 
-    if (state.hid_indicators & LED_CLCK) {
-        strncat(text, "C", 1);
-        lock = true;
-    }
-    if (state.hid_indicators & LED_NLCK) {
-        strncat(text, "N", 1);
-        lock = true;
-    }
-    if (state.hid_indicators & LED_SLCK) {
-        strncat(text, "S", 1);
-        lock = true;
-    }
-    if (lock) {
-        strncat(text, "LCK", 3);
-    }
+    lv_label_set_text(indicators_widget.caps_label, "CAPS");
+    lv_label_set_text(indicators_widget.num_label, "NUM");
+    lv_label_set_text(indicators_widget.scroll_label, "SCRL");
 
-    lv_label_set_text(label, text);
+    lv_obj_set_style_text_color(
+        indicators_widget.caps_label,
+        caps ? active_color : inactive_color,
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_color(
+        indicators_widget.num_label,
+        num ? active_color : inactive_color,
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_color(
+        indicators_widget.scroll_label,
+        scroll ? active_color : inactive_color,
+        LV_PART_MAIN
+    );
 }
 
-void hid_indicators_update_cb(struct hid_indicators_state state) {
-    struct zmk_widget_hid_indicators *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_hid_indicators(widget->obj, state); }
+static void hid_indicators_changed_listener(const struct zmk_event_header *eh) {
+    const struct zmk_hid_indicators_changed *ev = cast_zmk_hid_indicators_changed(eh);
+    update_indicators(ev->caps_lock, ev->num_lock, ev->scroll_lock);
 }
 
-static struct hid_indicators_state hid_indicators_get_state(const zmk_event_t *eh) {
-    struct zmk_hid_indicators_changed *ev = as_zmk_hid_indicators_changed(eh);
-    return (struct hid_indicators_state) {
-        .hid_indicators = ev->indicators,
-    };
-}
+ZMK_LISTENER(hid_indicators_widget, hid_indicators_changed_listener);
+ZMK_SUBSCRIPTION(hid_indicators_widget, zmk_hid_indicators_changed);
 
-ZMK_DISPLAY_WIDGET_LISTENER(widget_hid_indicators, struct hid_indicators_state,
-                            hid_indicators_update_cb, hid_indicators_get_state)
+lv_obj_t *hid_indicators_widget_create(lv_obj_t *parent) {
+    indicators_widget.container = lv_obj_create(parent);
+    lv_obj_set_layout(indicators_widget.container, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(indicators_widget.container, LV_FLEX_FLOW_ROW);
+    lv_obj_set_style_pad_all(indicators_widget.container, 4, LV_PART_MAIN);
 
-ZMK_SUBSCRIPTION(widget_hid_indicators, zmk_hid_indicators_changed);
+    indicators_widget.caps_label = lv_label_create(indicators_widget.container);
+    indicators_widget.num_label = lv_label_create(indicators_widget.container);
+    indicators_widget.scroll_label = lv_label_create(indicators_widget.container);
 
-int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_obj_t *parent) {
-    widget->obj = lv_label_create(parent);
+    // Initial state: all off
+    update_indicators(false, false, false);
 
-    sys_slist_append(&widgets, &widget->node);
-
-    widget_hid_indicators_init();
-
-    return 0;
-}
-
-lv_obj_t *zmk_widget_hid_indicators_obj(struct zmk_widget_hid_indicators *widget) {
-    return widget->obj;
+    return indicators_widget.container;
 }
