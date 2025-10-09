@@ -86,7 +86,7 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     widget->num_label = lv_label_create(widget->cont);
     lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 50, 0);
     widget->scroll_label = lv_label_create(widget->cont);
-    lv_obj_align(widget->scroll_label, LV_ALIGN_LEFT_MID, 100, 0);
+    lv_obj_align(widget->scroll_label, LV_ALIGN_LEFT_MID, 95, 0);
 
     // Optional: add some spacing between labels
     // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
