@@ -78,6 +78,7 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     lv_obj_set_style_border_width(widget->cont, 0, 0);
     lv_obj_set_style_pad_all(widget->cont, 0, 0);
     lv_obj_set_style_bg_opa(widget->cont, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_text_font(widget->cont, &lv_font_montserrat_12, 0);
 
     // Add labels
     widget->caps_label = lv_label_create(widget->cont);
