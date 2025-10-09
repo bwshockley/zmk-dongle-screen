@@ -21,7 +21,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 // Add LVGL color includes
 #include <lvgl.h>
-#include <lv_flex.h>
 
 struct hid_indicators_state {
     uint8_t hid_indicators;
