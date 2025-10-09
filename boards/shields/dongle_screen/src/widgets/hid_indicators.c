@@ -30,7 +30,7 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 // Define colors
 static lv_color_t inactive_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
-static lv_color_t active_color = lv_color_white();
+static lv_color_t active_color = LV_PALETTE_INDIGO;
 
 static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct hid_indicators_state state) {
     bool caps = state.hid_indicators & LED_CLCK;
