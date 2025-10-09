@@ -30,7 +30,7 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 // Define colors
 static lv_color_t inactive_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
-static lv_color_t active_color = LV_COLOR_MAKE(0x21, 0x96, 0xF3); // blue
+static lv_color_t active_color = LV_COLOR_MAKE(0x00, 0x00, 0xFF); // blue
 
 static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct hid_indicators_state state) {
     bool caps = state.hid_indicators & LED_CLCK;
@@ -84,9 +84,9 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     widget->caps_label = lv_label_create(widget->cont);
     lv_obj_align(widget->caps_label, LV_ALIGN_LEFT_MID, 0, 0);
     widget->num_label = lv_label_create(widget->cont);
-    lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 60, 0);
+    lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 50, 0);
     widget->scroll_label = lv_label_create(widget->cont);
-    lv_obj_align(widget->scroll_label, LV_ALIGN_LEFT_MID, 120, 0);
+    lv_obj_align(widget->scroll_label, LV_ALIGN_LEFT_MID, 100, 0);
 
     // Optional: add some spacing between labels
     // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
