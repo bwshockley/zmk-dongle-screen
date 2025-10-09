@@ -76,18 +76,20 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     // Create horizontal container
     widget->cont = lv_obj_create(parent);
     lv_obj_set_size(widget->cont, 240, 40);
-    lv_obj_set_flex_flow(widget->cont, LV_FLEX_FLOW_ROW);
     lv_obj_set_style_border_width(widget->cont, 0, 0);
     lv_obj_set_style_pad_all(widget->cont, 0, 0);
     lv_obj_set_style_bg_opa(widget->cont, LV_OPA_TRANSP, 0);
 
     // Add labels
     widget->caps_label = lv_label_create(widget->cont);
+    lv_obj_align(caps_label, LV_ALIGN_LEFT_MID, 0, 0);
     widget->num_label = lv_label_create(widget->cont);
+    lv_obj_align(num_label, LV_ALIGN_LEFT_MID, 60, 0);
     widget->scroll_label = lv_label_create(widget->cont);
+    lv_obj_align(scroll_label, LV_ALIGN_LEFT_MID, 120, 0);
 
     // Optional: add some spacing between labels
-    lv_obj_set_style_pad_gap(widget->cont, 8, 0);
+    // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
 
     sys_slist_append(&widgets, &widget->node);
 
