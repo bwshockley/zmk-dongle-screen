@@ -22,15 +22,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 // Add LVGL color includes
 #include <lvgl.h>
 
-// Define widget structure to store label pointers
-struct zmk_widget_hid_indicators {
-    lv_obj_t *cont;
-    lv_obj_t *caps_label;
-    lv_obj_t *num_label;
-    lv_obj_t *scroll_label;
-    sys_snode_t node;
-};
-
 struct hid_indicators_state {
     uint8_t hid_indicators;
 };
