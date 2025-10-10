@@ -40,7 +40,9 @@ static struct wpm_status_state get_state(const zmk_event_t *_eh)
         .wpm = ev ? ev->state : 0};
 }
 
-static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
+static void draw_wpm(lv_obj_t *canvas, uint8_t wpm_raw) {
+
+    
     
     if (wpm < 1)
     {
@@ -66,9 +68,9 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
     lv_canvas_set_px(canvas, WPM_BAR_LENGTH - 1, 0, lv_color_black());
     lv_canvas_set_px(canvas, WPM_BAR_LENGTH - 1, WPM_BAR_HEIGHT - 1, lv_color_black());
 
-    if (level <= 99 && level > 0)
+    if (wpm <= 99 && wpm > 0)
     {
-        lv_canvas_draw_rect(canvas, level, 1, WPM_BAR_LENGTH - 2 - level, WPM_BAR_HEIGHT-2, &rect_fill_dsc);
+        lv_canvas_draw_rect(canvas, wpm, 1, WPM_BAR_LENGTH - 2 - wpm, WPM_BAR_HEIGHT-2, &rect_fill_dsc);
         for (i = 1; i < WPM_BAR_HEIGHT; i++) {
             lv_canvas_set_px(canvas, WPM_BAR_LENGTH-2, i, lv_color_black());
         }   
