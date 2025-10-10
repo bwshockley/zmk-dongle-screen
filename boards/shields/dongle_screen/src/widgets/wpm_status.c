@@ -55,10 +55,10 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_CYAN), LV_OPA_COVER);
     } else if (wpm <= 50) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_GREEN), LV_OPA_COVER);
-    } else if (wpm <= 90) {
+    } else if (wpm <= 70) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_LIME), LV_OPA_COVER);
     } else {
-        lv_canvas_fill_bg(canvas, lv_color_black(), LV_OPA_COVER);
+        lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
     }
 
     lv_draw_rect_dsc_t rect_fill_dsc;
