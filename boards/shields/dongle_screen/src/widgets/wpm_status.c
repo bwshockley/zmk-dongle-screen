@@ -28,7 +28,7 @@ struct wpm_status_state
 struct wpm_object {
     lv_obj_t *symbol;
     lv_obj_t *label;
-}
+}:
 
 static lv_color_t wpm_image_buffer[WPM_BAR_LENGTH*WPM_BAR_HEIGHT];
 
