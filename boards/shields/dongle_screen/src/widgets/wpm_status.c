@@ -121,7 +121,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_canvas_set_buffer(image_canvas, wpm_image_buffer, WPM_BAR_LENGTH, WPM_BAR_HEIGHT, LV_IMG_CF_TRUE_COLOR);
 
     lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(wpm_label, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+    lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
 
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
