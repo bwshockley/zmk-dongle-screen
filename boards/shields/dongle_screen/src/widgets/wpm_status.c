@@ -40,36 +40,6 @@ static struct wpm_status_state get_state(const zmk_event_t *_eh)
         .wpm = ev ? ev->state : 0};
 }
 
-static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_state state)
-{
-    lv_obj_t *symbol = wpm_object.symbol;
-    lv_obj_t *label = wpm_object.label;
-    
-    draw_wpm(symbol, state.wpm);
-
-    char wpm_text[12];
-    snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
-    lv_label_set_text(label, wpm_text);
-
-    lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(symbol);
-    lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(label);
-}
-
-static void wpm_status_update_cb(struct wpm_status_state state)
-{
-    struct zmk_widget_wpm_status *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node)
-    {
-        set_wpm(widget, state);
-    }
-}
-
-ZMK_DISPLAY_WIDGET_LISTENER(widget_wpm_status, struct wpm_status_state,
-                            wpm_status_update_cb, get_state)
-ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
-
 static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
     
     if (wpm < 1)
@@ -104,6 +74,36 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
         }   
     }  
 }
+
+static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_state state)
+{
+    lv_obj_t *symbol = wpm_object.symbol;
+    lv_obj_t *label = wpm_object.label;
+    
+    draw_wpm(symbol, state.wpm);
+
+    char wpm_text[12];
+    snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
+    lv_label_set_text(label, wpm_text);
+
+    lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(symbol);
+    lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(label);
+}
+
+static void wpm_status_update_cb(struct wpm_status_state state)
+{
+    struct zmk_widget_wpm_status *widget;
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node)
+    {
+        set_wpm(widget, state);
+    }
+}
+
+ZMK_DISPLAY_WIDGET_LISTENER(widget_wpm_status, struct wpm_status_state,
+                            wpm_status_update_cb, get_state)
+ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
 
 // output_status.c
 int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *parent)
