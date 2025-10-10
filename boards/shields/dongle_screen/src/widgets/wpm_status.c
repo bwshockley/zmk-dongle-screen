@@ -16,8 +16,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "wpm_status.h"
 #include <fonts.h>
 
-const int WPM_BAR_LENGTH = 102;
-const int WPM_BAR_HEIGHT = 20;
+#define WPM_BAR_LENGTH = 102;
+#define WPM_BAR_HEIGHT = 20;
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 struct wpm_status_state
