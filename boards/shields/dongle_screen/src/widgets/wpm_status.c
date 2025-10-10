@@ -73,7 +73,7 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
     if (wpm <= 99 && wpm > 0)
     {
         lv_canvas_draw_rect(canvas, wpm, 1, WPM_BAR_LENGTH - 2 - wpm, WPM_BAR_HEIGHT-2, &rect_fill_dsc);
-        for (i = 1; i < WPM_BAR_HEIGHT; i++) {
+        for (int i = 1; i < WPM_BAR_HEIGHT; i++) {
             lv_canvas_set_px(canvas, WPM_BAR_LENGTH-2, i, lv_color_black());
         }   
     }  
