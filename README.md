@@ -1,46 +1,28 @@
-# ZMK Dongle Screen YADS (Yet another Dongle Screen)
+# ZMK Dongle Screen
 
 This project provides a Zephyr module for a dongle display shield based on the ST7789V display and the Seeeduino XAIO BLE microcontroller and the LVGL graphics library.  
 The display can take advantage of a ambient light sensor to dim and brighten the display automatically.  
 It offers various widgets for current output, displaying layer, mod, WPM, and battery status, as well as brightness adjustments via keyboard, automatic dimming after inactivity, and a customizable status screen for ZMK-based keyboards.
 
-**This project is inspired by [prospector-zmk-module](https://github.com/carrefinho/prospector-zmk-module) and [zmk-dongle-display](https://github.com/englmaxi/zmk-dongle-display). Thanks for your awesome work!**
-
-## Demo
-
-![Sample Screen of zmk-dongle-screen](/docs/images/screen.jpg)
-
-<https://github.com/user-attachments/assets/86c33af6-d83e-4e2a-9766-fc8836e896f1>
-
-### Brightness changes with ambient light sensor and screen toggle
-
-https://github.com/user-attachments/assets/3379f79c-af90-4763-8ba5-8a8f34fd66cf
-
-## Building a dongle
-
-To build a dongle yourself you can use the build guide by **carrefinho** ([prospector project](https://github.com/carrefinho/prospector)) based on the Seeed Studio XIAO nRF52840.
-
-nice!nano v2 supported. [Wiring guide](/docs/nice_nano_wire_guide.md).
-
-This repository only contains a module and no build guides or suggestions.
+**This project is inspired by [YADS zmk-dongle_display](https://github.com/janpfischer/zmk-dongle-screen) and  [prospector-zmk-module](https://github.com/carrefinho/prospector-zmk-module) and [zmk-dongle-display](https://github.com/englmaxi/zmk-dongle-display). and Thanks for your awesome work!**
 
 ## Widgets Overview
 
 This module provides several widgets to visualize the current state of your ZMK-based keyboard:
 
 - **Output Widget**  
-  Indicates the current output state of the keyboard (USB or BLE profiles). The currently used interface (USB or BLE) is indicated with an arrow.
+  Indicates the current output state of the keyboard (USB or BLE profiles). The currently used interface (USB or BLE) is indicated with an icon.
   - **USB:**
-    - **White:** USB HID is ready and active (dongle is connected to a computer and working as a keyboard).
+    - **Orange:** USB HID is ready and active (dongle is connected to a computer and working as a keyboard).
     - **Red:** USB HID is not ready (dongle is powered, e.g. via wall plug or power bank, but not connected to a computer).
   - **BLE:**  
-    For the currently selected Bluetooth profile (the number is shown in the next line):
+    For the currently selected Bluetooth profile:
     - **Green:** Connected (active BLE connection established)
     - **Blue:** Bonded (device is paired, but not currently connected)
     - **White:** Profile is free (no device paired or connected for this profile)
 
 - **Layer Widget**  
-  Displays the currently active keyboard layer. Useful for quickly identifying which layer is active.
+  Displays the currently active keyboard layer. Useful for quickly identifying which layer is active.  There is example customization on how to color code layer names as well.  In my example I have an "Orange" and "Greeen" layer, so I set text colors accordingly.
 
 - **Mod Widget**  
   Shows the status of modifier keys (e.g., Shift, Ctrl, Alt, GUI). Indicates which modifiers are currently pressed.
@@ -50,6 +32,11 @@ This module provides several widgets to visualize the current state of your ZMK-
 
 - **Battery Widget**  
   Shows the battery level of the dongle and/or the keyboard, if supported.
+
+- **Lock status Widget**
+  Shows the current status of the three lock states; CAPS LOCK, NUM LOCK, and SCROOL LOCK.
+    - **Dark grey:** indicates the state is not active
+    - **Blue:** indicates the state is active.
 
 ## General Features
 
@@ -82,94 +69,6 @@ This module provides several widgets to visualize the current state of your ZMK-
 
 ## Installation
 
-**ZMK version compatability**
-YADS needs at least ZMK version `0.3.0` or `main` (if newer than `0.3.0`) to be build. 
-
-1. This guide assumes that you have already implemented a basic dongle setup as described [here](https://zmk.dev/docs/development/hardware-integration/dongle).
-2. Once this is done, add this repository to your `west.yaml`.  
-   Example:
-
-   ```yaml
-   manifest:
-     remotes:
-       - name: zmkfirmware
-         url-base: https://github.com/zmkfirmware
-       - name: janpfischer
-         url-base: https://github.com/janpfischer
-     projects:
-       - name: zmk
-         remote: zmkfirmware
-         revision: 0.3.0 # or main if newer than 0.3.0
-         import: app/west.yml
-       - name: zmk-dongle-screen
-         remote: janpfischer
-         revision: main
-     self:
-       path: config
-   ```
-
-   Note: If you want to pin the release of `zmk-dongle-screen` or `zmk` in general you can update the `revision` to use a tag or commit SHA.
-  
-   Example for using `zmk-dongle-screen` version 0.0.1:
-
-   ```yaml
-   - name: zmk-dongle-screen
-     remote: janpfischer
-     revision: 0.0.1
-   ```
-
-3. The shield must be included in your build configuration for the dongle you set up in step 1.  
-   Example `build.yaml` snippet:
-
-   ```yaml
-   include:
-     - board: seeeduino_xiao_ble
-       shield: [YOUR_CONFIGURED_DONGLE] dongle_screen
-       #cmake-args: -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=8000 #optional if logging is enabled
-       #snippet: zmk-usb-logging #only enable for debugging
-       artifact-name: dongle-screen
-   ```
-
-4. Keyboard splits must be configured as peripherals.  
-   Example `build.yaml` snippet:
-
-   ```yaml
-   include:
-     - board: seeeduino_xiao_ble
-       shield: split_left
-       cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
-       artifact-name: split-dongle-left
-     - board: seeeduino_xiao_ble
-       shield: split_right
-       cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
-       artifact-name: split-dongle-right
-   ```
-
-5. Adjust the desired configuration options in your `[YOUR_CONFIGURED_DONGLE].conf` (see table below).
-
-### Configuration sample
-
-A sample `build.yaml` based on `seeeduino_xiao_ble` boards for the keyboard and the dongle including a `settings_reset` firmware could look like this:
-
-```yaml
-include:
-  - board: seeeduino_xiao_ble
-    shield: totem_left
-    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
-    artifact-name: totem-dongle-left
-  - board: seeeduino_xiao_ble
-    shield: totem_right
-    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
-    artifact-name: totem-dongle-right
-  - board: seeeduino_xiao_ble
-    shield: totem_dongle dongle_screen
-    cmake-args: -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=8000
-    snippet: zmk-usb-logging
-    artifact-name: totem-dongle-screen
-  - board: seeeduino_xiao_ble
-    shield: settings_reset
-    artifact-name: totem-settings-reset
-```
 
 ## Configuration Options
 
