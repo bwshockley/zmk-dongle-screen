@@ -40,9 +40,11 @@ static struct wpm_status_state get_state(const zmk_event_t *_eh)
         .wpm = ev ? ev->state : 0};
 }
 
-static void draw_wpm(lv_obj_t *canvas, uint8_t wpm_raw) {
+static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
 
-    
+    if (wpm > 100) {
+        wpm = 100;
+    } 
     
     if (wpm < 1)
     {
