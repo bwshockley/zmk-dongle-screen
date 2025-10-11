@@ -100,23 +100,22 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
 
     lv_style_init(&style_bg);
     lv_style_set_border_color(&style_bg, lv_palette_main(LV_PALETTE_BLUE));
-    lv_style_set_border_width(&style_bg, 2);
-    lv_style_set_pad_all(&style_bg, 6); /*To make the indicator smaller*/
+    lv_style_set_border_width(&style_bg, 1);
     lv_style_set_radius(&style_bg, 6);
 
     lv_style_init(&style_indic);
     lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
-    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
-    lv_style_set_radius(&style_indic, 3);
+    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_GREEN));
+    lv_style_set_radius(&style_indic, 5);
 
     lv_obj_remove_style_all(bar);  /*To have a clean start*/
     lv_obj_add_style(bar, &style_bg, 0);
     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
 
     // Update the LV Bar
-    lv_obj_set_size(bar, 200, 20);
+    lv_obj_set_size(bar, 120, 20);
     lv_obj_center(bar);
-    lv_bar_set_range(bar, 0, 100);
+    lv_bar_set_range(bar, 0, 120);
     lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
 
     // Remove Hidden Flags and Bring to Front
@@ -159,7 +158,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     // Align all the objects within the newly created widget.
     lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(bar1, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+    lv_obj_align(bar1, LV_ALIGN_TOP_LEFT, 0, 0);
 
     // Temporarily hide them until we we ready to work on them.
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
