@@ -28,6 +28,7 @@ struct wpm_status_state
 struct wpm_object {
     lv_obj_t *symbol;
     lv_obj_t *label;
+    lv_obj_t *bar;
 } wpm_object;
 
 static lv_color_t wpm_image_buffer[WPM_BAR_LENGTH*WPM_BAR_HEIGHT];
@@ -83,17 +84,21 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
 {
     lv_obj_t *symbol = wpm_object.symbol;
     lv_obj_t *label = wpm_object.label;
+    lv_obj_t *bar = wpm_object.bar;
     
     draw_wpm(symbol, state.wpm);
 
     char wpm_text[12];
     snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
     lv_label_set_text(label, wpm_text);
+    lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
 
     lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(symbol);
     lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(label);
+    lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(bar);
 }
 
 static void wpm_status_update_cb(struct wpm_status_state state)
@@ -129,13 +134,15 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_obj_t * bar1 = lv_bar_create(widget->obj);
     lv_obj_set_size(bar1, 100, 20);
     lv_obj_center(bar1);
-    lv_bar_set_value(bar1, 70, LV_ANIM_OFF);
+    lv_bar_set_value(bar1, 0, LV_ANIM_OFF);
 
     lv_obj_align(bar1, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+    lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
         
     wpm_object = (struct wpm_object){
             .symbol = image_canvas,
             .label = wpm_label,
+            .bar = bar1,
     };
 
     sys_slist_append(&widgets, &widget->node);
