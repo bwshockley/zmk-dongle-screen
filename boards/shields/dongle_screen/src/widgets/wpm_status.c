@@ -90,11 +90,7 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
     char buf[8];
     lv_snprintf(buf, sizeof(buf), "%d", wpm);
 
-    lv_text_attributes_t attributes = {0};
-    attributes.letter_space = label_dsc.letter_space;
-    attributes.line_space = label_dsc.line_space;
-    attributes.max_width = LV_COORD_MAX;
-    attributes.text_flags = label_dsc.flag;
+    lv_label_set_text(label_dsc, wpm_text);
 
     lv_point_t txt_size;
     lv_text_get_size(&txt_size, buf, label_dsc.font, &attributes);
