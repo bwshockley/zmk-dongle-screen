@@ -33,6 +33,9 @@ struct wpm_object {
 
 static lv_color_t wpm_image_buffer[WPM_BAR_LENGTH*WPM_BAR_HEIGHT];
 
+static lv_style_t style_bg;
+static lv_style_t style_indic;
+
 static struct wpm_status_state get_state(const zmk_event_t *_eh)
 {
     const struct zmk_wpm_state_changed *ev = as_zmk_wpm_state_changed(_eh);
@@ -94,6 +97,22 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     char wpm_text[12];
     snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
     lv_label_set_text(label, wpm_text);
+
+    lv_style_init(&style_bg);
+    lv_style_set_border_color(&style_bg, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_border_width(&style_bg, 2);
+    lv_style_set_pad_all(&style_bg, 6); /*To make the indicator smaller*/
+    lv_style_set_radius(&style_bg, 6);
+    lv_style_set_anim_duration(&style_bg, 1000);
+
+    lv_style_init(&style_indic);
+    lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
+    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_radius(&style_indic, 3);
+
+    lv_obj_remove_style_all(bar);  /*To have a clean start*/
+    lv_obj_add_style(bar, &style_bg, 0);
+    lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
 
     // Update the LV Bar
     lv_obj_set_size(bar, 200, 20);
