@@ -103,7 +103,6 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     lv_style_set_border_width(&style_bg, 2);
     lv_style_set_pad_all(&style_bg, 6); /*To make the indicator smaller*/
     lv_style_set_radius(&style_bg, 6);
-    lv_style_set_anim_duration(&style_bg, 1000);
 
     lv_style_init(&style_indic);
     lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
