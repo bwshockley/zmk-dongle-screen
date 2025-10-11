@@ -90,7 +90,7 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
     char buf[8];
     lv_snprintf(buf, sizeof(buf), "%d", wpm);
 
-    lv_label_set_text(label_dsc, wpm_text);
+    lv_label_set_text(label_dsc, wpm);
 
     lv_point_t txt_size;
     lv_text_get_size(&txt_size, buf, label_dsc.font, &attributes);
