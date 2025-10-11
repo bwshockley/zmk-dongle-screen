@@ -102,10 +102,10 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
 
     // Remove Hidden Flags and Bring to Front
-    lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(symbol);
-    lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(label);
+    //lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
+    //lv_obj_move_foreground(symbol);
+    //lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
+    //lv_obj_move_foreground(label);
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(bar);
 }
@@ -146,7 +146,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     // Temporarily hide them until we we ready to work on them.
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(bar1, LV_OBJ_FLAG_HIDDEN);    
+    //lv_obj_add_flag(bar1, LV_OBJ_FLAG_HIDDEN);    
 
     // Create the wmp_object assigning the objects created in this function to the wpm_object.
     wpm_object = (struct wpm_object){
@@ -158,6 +158,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     sys_slist_append(&widgets, &widget->node);
 
     widget_wpm_status_init();
+    
     return 0;
 }
 
