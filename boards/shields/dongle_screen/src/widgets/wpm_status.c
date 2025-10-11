@@ -90,6 +90,9 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
 
     char wpm_text[12];
     snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
+
+    lv_obj_set_size(bar, 100, 20);
+    lv_obj_center(bar);
     lv_label_set_text(label, wpm_text);
     lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
 
@@ -120,24 +123,19 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 60);
 
-    lv_obj_t *image_canvas = lv_canvas_create(widget->obj);
-    lv_obj_t *wpm_label = lv_label_create(widget->obj);
+    lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
+    lv_obj_t * wpm_label = lv_label_create(widget->obj);
+    lv_obj_t * bar1 = lv_bar_create(widget->obj);
 
     lv_canvas_set_buffer(image_canvas, wpm_image_buffer, WPM_BAR_LENGTH, WPM_BAR_HEIGHT, LV_IMG_CF_TRUE_COLOR);
 
     lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(bar1, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
-
-    lv_obj_t * bar1 = lv_bar_create(widget->obj);
-    lv_obj_set_size(bar1, 100, 20);
-    lv_obj_center(bar1);
-    lv_bar_set_value(bar1, 0, LV_ANIM_OFF);
-
-    lv_obj_align(bar1, LV_ALIGN_BOTTOM_LEFT, 0, 0);
-    lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(bar1, LV_OBJ_FLAG_HIDDEN);    
         
     wpm_object = (struct wpm_object){
             .symbol = image_canvas,
