@@ -132,7 +132,6 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_bar_set_value(bar1, 70, LV_ANIM_OFF);
 
     lv_obj_align(bar1, LV_ALIGN_BOTTOM_LEFT, 0, 0);
-    lv_obj_add_flag(bar1, LV_OBJ_FLAG_HIDDEN);
         
     wpm_object = (struct wpm_object){
             .symbol = image_canvas,
