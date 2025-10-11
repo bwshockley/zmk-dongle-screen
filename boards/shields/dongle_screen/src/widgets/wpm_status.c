@@ -113,7 +113,7 @@ ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
 int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *parent)
 {
     widget->obj = lv_obj_create(parent);
-    lv_obj_set_size(widget->obj, 240, 40);
+    lv_obj_set_size(widget->obj, 240, 60);
 
     lv_obj_t *image_canvas = lv_canvas_create(widget->obj);
     lv_obj_t *wpm_label = lv_label_create(widget->obj);
@@ -126,7 +126,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
 
-    lv_obj_t * bar1 = lv_bar_create(lv_screen_active());
+    lv_obj_t * bar1 = lv_bar_create(widget->obj);
     lv_obj_set_size(bar1, 100, 20);
     lv_obj_center(bar1);
     lv_bar_set_value(bar1, 70, LV_ANIM_OFF);
