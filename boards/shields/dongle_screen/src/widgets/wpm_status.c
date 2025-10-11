@@ -114,7 +114,7 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
 
     // Update the LV Bar
     lv_obj_set_size(bar, 120, 20);
-    lv_obj_center(bar);
+    //lv_obj_center(bar);
     lv_bar_set_range(bar, 0, 120);
     lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
 
