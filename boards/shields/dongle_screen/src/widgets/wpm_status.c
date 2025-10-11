@@ -19,6 +19,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define WPM_BAR_LENGTH 102
 #define WPM_BAR_HEIGHT 20
 
+static lv_color_t dark_grey_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
+
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 struct wpm_status_state
 {
@@ -96,10 +98,11 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     // Update the WPM Label
     char wpm_text[12];
     snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
+    
     lv_label_set_text(label, wpm_text);
 
     lv_style_init(&style_bg);
-    lv_style_set_border_color(&style_bg, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_border_color(&style_bg, dark_grey_color);
     lv_style_set_border_width(&style_bg, 1);
     lv_style_set_radius(&style_bg, 6);
 
@@ -151,14 +154,20 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
     lv_obj_t * wpm_label = lv_label_create(widget->obj);
     lv_obj_t * bar1 = lv_bar_create(widget->obj);
+    lv_obj_t * wpm_label2 = lv_label_create(widget->obj);
 
     // Setup the canvas for the drawing later.
     lv_canvas_set_buffer(image_canvas, wpm_image_buffer, WPM_BAR_LENGTH, WPM_BAR_HEIGHT, LV_IMG_CF_TRUE_COLOR);
 
+    lv_label_set_text(wpm_label2, "words per min");
+    lv_obj_set_style_text_font(wpm_label2, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_color(wpm_label2, dark_grey_color, 0);
+    
     // Align all the objects within the newly created widget.
     lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(bar1, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(wpm_label2, LV_ALIGN_TOP_LEFT, 0, 25);
 
     // Temporarily hide them until we we ready to work on them.
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
