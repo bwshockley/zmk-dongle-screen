@@ -82,20 +82,26 @@ static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
 
 static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_state state)
 {
+    // Create the three objects associated with the wpm_object so we can manipulate them
     lv_obj_t *symbol = wpm_object.symbol;
     lv_obj_t *label = wpm_object.label;
     lv_obj_t *bar = wpm_object.bar;
-    
+
+    // Update the Drawing - see other function above.
     draw_wpm(symbol, state.wpm);
 
+    // Update the WPM Label
     char wpm_text[12];
     snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
-
-    lv_obj_set_size(bar, 100, 20);
-    lv_obj_center(bar);
     lv_label_set_text(label, wpm_text);
+
+    // Update the LV Bar
+    lv_obj_set_size(bar, 200, 20);
+    lv_obj_center(bar);
+    lv_bar_set_range(bar, 0, 100);
     lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
 
+    // Remove Hidden Flags and Bring to Front
     lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(symbol);
     lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
@@ -120,23 +126,29 @@ ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
 // output_status.c
 int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *parent)
 {
+    // Create the widget and set to parent.
     widget->obj = lv_obj_create(parent);
-    lv_obj_set_size(widget->obj, 240, 60);
+    lv_obj_set_size(widget->obj, 240, 100);
 
+    // Create the three objects and assign each to the widget.
     lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
     lv_obj_t * wpm_label = lv_label_create(widget->obj);
     lv_obj_t * bar1 = lv_bar_create(widget->obj);
 
+    // Setup the canvas for the drawing later.
     lv_canvas_set_buffer(image_canvas, wpm_image_buffer, WPM_BAR_LENGTH, WPM_BAR_HEIGHT, LV_IMG_CF_TRUE_COLOR);
 
+    // Align all the objects within the newly created widget.
     lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(bar1, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 
+    // Temporarily hide them until we we ready to work on them.
     lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(bar1, LV_OBJ_FLAG_HIDDEN);    
-        
+
+    // Create the wmp_object assigning the objects created in this function to the wpm_object.
     wpm_object = (struct wpm_object){
             .symbol = image_canvas,
             .label = wpm_label,
