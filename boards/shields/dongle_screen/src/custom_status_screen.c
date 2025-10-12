@@ -81,12 +81,12 @@ lv_obj_t *zmk_display_status_screen()
 
 #if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
     zmk_widget_layer_status_init(&layer_status_widget, screen);
-    lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_LEFT_MID, 20, 0);
+    lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_LEFT_MID, 20, -20);
 #endif
 
 #if CONFIG_DONGLE_SCREEN_HID_INDICATORS_ACTIVE
     zmk_widget_hid_indicators_init(&hid_indicators_widget, screen);
-    lv_obj_align(zmk_widget_hid_indicators_obj(&hid_indicators_widget), LV_ALIGN_LEFT_MID, 20, 30);
+    lv_obj_align(zmk_widget_hid_indicators_obj(&hid_indicators_widget), LV_ALIGN_LEFT_MID, 20, 10);
 #endif
 /*
 #if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
@@ -97,7 +97,7 @@ lv_obj_t *zmk_display_status_screen()
 
 #if CONFIG_DONGLE_SCREEN_MODIFIER_ACTIVE
     zmk_widget_mod_status_init(&mod_widget, screen);
-    lv_obj_align(zmk_widget_mod_status_obj(&mod_widget), LV_ALIGN_RIGHT_MID, 0, 0);
+    lv_obj_align(zmk_widget_mod_status_obj(&mod_widget), LV_ALIGN_CENTER, 0, 40);
 #endif
     
     zmk_widget_brightness_status_init(&brightness_status_widget, screen);
