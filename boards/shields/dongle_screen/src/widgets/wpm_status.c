@@ -93,7 +93,7 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     lv_obj_t *bar = wpm_object.bar;
 
     // Update the Drawing - see other function above.
-    draw_wpm(symbol, state.wpm);
+    // draw_wpm(symbol, state.wpm);
 
     // Update the WPM Label
     char wpm_text[12];
@@ -104,28 +104,23 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     lv_style_init(&style_bg);
     lv_style_set_border_color(&style_bg, dark_grey_color);
     lv_style_set_border_width(&style_bg, 1);
-    lv_style_set_radius(&style_bg, 6);
+    lv_style_set_radius(&style_bg, 10);
 
     lv_style_init(&style_indic);
     lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
-    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_GREEN));
-    lv_style_set_radius(&style_indic, 5);
+    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_YELLOW));
+    lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
+    lv_style_set_radius(&style_indic, 8);
 
-    lv_obj_remove_style_all(bar);  /*To have a clean start*/
-    lv_obj_add_style(bar, &style_bg, 0);
+    //lv_obj_remove_style_all(bar);  /*To have a clean start*/
+    //lv_obj_add_style(bar, &style_bg, 0);
     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
 
-    // Update the LV Bar
     lv_obj_set_size(bar, 120, 20);
-    //lv_obj_center(bar);
-    lv_bar_set_range(bar, 0, 120);
-    lv_bar_set_value(bar, state.wpm, LV_ANIM_OFF);
+    lv_bar_set_range(bar, 0, 160);
+    lv_bar_set_value(bar, state.wpm, LV_ANIM_ON);
 
-    // Remove Hidden Flags and Bring to Front
-    //lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
-    //lv_obj_move_foreground(symbol);
-    //lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
-    //lv_obj_move_foreground(label);
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(bar);
 }
