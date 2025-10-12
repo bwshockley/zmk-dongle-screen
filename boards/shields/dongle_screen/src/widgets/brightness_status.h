@@ -1,7 +1,7 @@
 #pragma once
 
 #include <lvgl.h>
-#include <zmk/display.h>
+#include <zephyr/kernel.h>
 
 struct zmk_widget_brightness_status
 {
