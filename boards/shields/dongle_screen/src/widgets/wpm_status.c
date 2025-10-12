@@ -41,65 +41,14 @@ static lv_style_t style_indic;
 static struct wpm_status_state get_state(const zmk_event_t *_eh)
 {
     const struct zmk_wpm_state_changed *ev = as_zmk_wpm_state_changed(_eh);
-
     return (struct wpm_status_state){
         .wpm = ev ? ev->state : 0};
-}
-
-static void draw_wpm(lv_obj_t *canvas, uint8_t wpm) {
-
-    if (wpm > 100) {
-        wpm = 100;
-    } 
-    
-    if (wpm < 1)
-    {
-        lv_canvas_fill_bg(canvas, lv_color_black(), LV_OPA_COVER);
-    } else if (wpm <= 10) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_PURPLE), LV_OPA_COVER);
-    } else if (wpm <= 30) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_CYAN), LV_OPA_COVER);
-    } else if (wpm <= 50) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_GREEN), LV_OPA_COVER);
-    } else if (wpm <= 70) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_LIME), LV_OPA_COVER);
-    } else {
-        lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
-    }
-
-    lv_draw_rect_dsc_t rect_fill_dsc;
-    lv_draw_rect_dsc_init(&rect_fill_dsc);
-    rect_fill_dsc.bg_color = lv_color_black();
-
-    lv_canvas_set_px(canvas, 0, 0, lv_color_black());
-    lv_canvas_set_px(canvas, 0, WPM_BAR_HEIGHT - 1, lv_color_black());
-    lv_canvas_set_px(canvas, WPM_BAR_LENGTH - 1, 0, lv_color_black());
-    lv_canvas_set_px(canvas, WPM_BAR_LENGTH - 1, WPM_BAR_HEIGHT - 1, lv_color_black());
-
-    if (wpm <= 99 && wpm > 0)
-    {
-        lv_canvas_draw_rect(canvas, wpm, 1, WPM_BAR_LENGTH - 2 - wpm, WPM_BAR_HEIGHT-2, &rect_fill_dsc);
-        for (int i = 1; i < WPM_BAR_HEIGHT; i++) {
-            lv_canvas_set_px(canvas, WPM_BAR_LENGTH-2, i, lv_color_black());
-        }   
-    }  
 }
 
 static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_state state)
 {
     // Create the three objects associated with the wpm_object so we can manipulate them
-    lv_obj_t *symbol = wpm_object.symbol;
-    lv_obj_t *label = wpm_object.label;
     lv_obj_t *bar = wpm_object.bar;
-
-    // Update the Drawing - see other function above.
-    // draw_wpm(symbol, state.wpm);
-
-    // Update the WPM Label
-    char wpm_text[12];
-    snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
-    
-    lv_label_set_text(label, wpm_text);
 
     lv_style_init(&style_bg);
     lv_style_set_border_color(&style_bg, dark_grey_color);
@@ -113,8 +62,8 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
     lv_style_set_radius(&style_indic, 8);
 
-    //lv_obj_remove_style_all(bar);  /*To have a clean start*/
-    //lv_obj_add_style(bar, &style_bg, 0);
+    lv_obj_remove_style_all(bar);  /*To have a clean start*/
+    lv_obj_add_style(bar, &style_bg, 0);
     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
 
     lv_obj_set_size(bar, 120, 20);
