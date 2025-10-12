@@ -5,7 +5,7 @@
 static void update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
 {
     char brightness_text[8] = {};
-    snprintf(brightness_text, sizeof(brightness_text), "%i %", brightness);
+    snprintf(brightness_text, sizeof(brightness_text), "%i", brightness);
     lv_label_set_text(widget->label, brightness_text);
 
     //lv_anim_t a;
@@ -31,7 +31,7 @@ int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widge
     widget->label = lv_label_create(widget->obj);
     lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(widget->label, "50%");
-    lv_obj_set_style_text_font(widget->label, &NerdFonts_Regular_40, 0);
+    lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_48, 0);
     lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);  
 
     return 0;
