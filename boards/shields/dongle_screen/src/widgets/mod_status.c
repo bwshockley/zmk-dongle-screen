@@ -57,7 +57,7 @@ int zmk_widget_mod_status_init(struct zmk_widget_mod_status *widget, lv_obj_t *p
     lv_obj_set_size(widget->obj, 240, 40);
 
     widget->label = lv_label_create(widget->obj);
-    lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(widget->label, LV_ALIGN_RIGHT_MID, 0, 0);
     lv_label_set_text(widget->label, "-");
     lv_obj_set_style_text_font(widget->label, &NerdFonts_Regular_40, 0); // <-- NerdFont setzen
 
