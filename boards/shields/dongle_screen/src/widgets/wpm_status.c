@@ -16,9 +16,13 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "wpm_status.h"
 #include <fonts.h>
 
-#define WPM_BAR_LENGTH 102
+#define WPM_BAR_LENGTH 120
 #define WPM_BAR_HEIGHT 20
 
+#define WPM_BAR_MIN 0
+#define WPM_BAR_MAX 160
+
+// Stylize the bar here.
 static lv_color_t dark_grey_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
@@ -46,24 +50,8 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     // Create the three objects associated with the wpm_object so we can manipulate them
     lv_obj_t *bar = wpm_object.bar;
 
-    lv_style_init(&style_bg);
-    lv_style_set_border_color(&style_bg, dark_grey_color);
-    lv_style_set_border_width(&style_bg, 1);
-    lv_style_set_radius(&style_bg, 10);
+    if (state.wpm > WPM_BAR_MAX) { state.wpm = WPM_BAR_MAX };
 
-    lv_style_init(&style_indic);
-    lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
-    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_YELLOW));
-    lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
-    lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
-    lv_style_set_radius(&style_indic, 8);
-
-    lv_obj_remove_style_all(bar);  /*To have a clean start*/
-    lv_obj_add_style(bar, &style_bg, 0);
-    lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
-
-    lv_obj_set_size(bar, 120, 20);
-    lv_bar_set_range(bar, 0, 160);
     lv_bar_set_value(bar, state.wpm, LV_ANIM_ON);
 
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
@@ -94,6 +82,27 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_obj_t * bar = lv_bar_create(widget->obj);
     lv_obj_t * wpm_label = lv_label_create(widget->obj);
 
+    // Set the bar style.
+    lv_style_init(&style_bg);
+    lv_style_set_border_color(&style_bg, dark_grey_color);
+    lv_style_set_border_width(&style_bg, 1);
+    lv_style_set_radius(&style_bg, 10);
+
+    lv_style_init(&style_indic);
+    lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
+    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_YELLOW));
+    lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
+    lv_style_set_radius(&style_indic, 8);
+
+    lv_obj_remove_style_all(bar);  /*To have a clean start*/
+    lv_obj_add_style(bar, &style_bg, 0);
+    lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
+
+    lv_obj_set_size(bar, WPM_BAR_LENGTH, WPM_BAR_HEIGHT);
+    lv_bar_set_range(bar, WPM_BAR_MIN, WPM_BAR_MAX);
+
+    // Set the label.
     lv_label_set_text(wpm_label, "Words per Minute");
     lv_obj_set_style_text_font(wpm_label, &lv_font_montserrat_12, 0);
     lv_obj_set_style_text_color(wpm_label, dark_grey_color, 0);
