@@ -50,7 +50,7 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     // Create the three objects associated with the wpm_object so we can manipulate them
     lv_obj_t *bar = wpm_object.bar;
 
-    if (state.wpm > WPM_BAR_MAX) { state.wpm = WPM_BAR_MAX };
+    if (state.wpm > WPM_BAR_MAX) { state.wpm = WPM_BAR_MAX; }
 
     lv_bar_set_value(bar, state.wpm, LV_ANIM_ON);
 
