@@ -54,7 +54,7 @@ static struct k_timer mod_status_timer;
 int zmk_widget_mod_status_init(struct zmk_widget_mod_status *widget, lv_obj_t *parent)
 {
     widget->obj = lv_obj_create(parent);
-    lv_obj_set_size(widget->obj, 180, 40);
+    lv_obj_set_size(widget->obj, 240, 40);
 
     widget->label = lv_label_create(widget->obj);
     lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
