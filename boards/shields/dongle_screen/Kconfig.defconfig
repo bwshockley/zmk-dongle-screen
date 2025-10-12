@@ -16,7 +16,6 @@ config ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 	select LV_USE_ROLLER
     select LV_USE_LINE
 	select LV_USE_BAR
-	select LV_BUILD_EXAMPLES
     select LV_FONT_UNSCII_8
     select ZMK_WPM
     imply ZMK_HID_INDICATORS
@@ -56,7 +55,7 @@ config LV_COLOR_16_SWAP
 	default y
 
 config LV_DISP_DEF_REFR_PERIOD
-    default 20
+    default 33
 
 choice LV_FONT_DEFAULT
     default LV_FONT_DEFAULT_MONTSERRAT_20
