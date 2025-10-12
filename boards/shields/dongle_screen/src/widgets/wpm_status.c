@@ -94,7 +94,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     lv_obj_t * bar = lv_bar_create(widget->obj);
     lv_obj_t * wpm_label = lv_label_create(widget->obj);
 
-    lv_label_set_text(wpm_label, "words per min");
+    lv_label_set_text(wpm_label, "Words per Minute");
     lv_obj_set_style_text_font(wpm_label, &lv_font_montserrat_12, 0);
     lv_obj_set_style_text_color(wpm_label, dark_grey_color, 0);
     
