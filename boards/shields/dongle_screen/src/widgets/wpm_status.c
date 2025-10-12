@@ -88,7 +88,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
 {
     // Create the widget and set to parent.
     widget->obj = lv_obj_create(parent);
-    lv_obj_set_size(widget->obj, 240, 100);
+    lv_obj_set_size(widget->obj, 240, 50);
 
     // Create theobjects and assign each to the widget.
     lv_obj_t * bar = lv_bar_create(widget->obj);
@@ -100,7 +100,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     
     // Align all the objects within the newly created widget.
     lv_obj_align(bar, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 25);
+    lv_obj_align(wpm_label, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 
     // Temporarily hide them until we we ready to work on them.
     lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);    
