@@ -28,12 +28,8 @@ struct wpm_status_state
 };
 
 struct wpm_object {
-    lv_obj_t *symbol;
-    lv_obj_t *label;
     lv_obj_t *bar;
 } wpm_object;
-
-static lv_color_t wpm_image_buffer[WPM_BAR_LENGTH*WPM_BAR_HEIGHT];
 
 static lv_style_t style_bg;
 static lv_style_t style_indic;
@@ -94,35 +90,24 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 100);
 
-    // Create the three objects and assign each to the widget.
-    lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
+    // Create theobjects and assign each to the widget.
+    lv_obj_t * bar = lv_bar_create(widget->obj);
     lv_obj_t * wpm_label = lv_label_create(widget->obj);
-    lv_obj_t * bar1 = lv_bar_create(widget->obj);
-    lv_obj_t * wpm_label2 = lv_label_create(widget->obj);
 
-    // Setup the canvas for the drawing later.
-    lv_canvas_set_buffer(image_canvas, wpm_image_buffer, WPM_BAR_LENGTH, WPM_BAR_HEIGHT, LV_IMG_CF_TRUE_COLOR);
-
-    lv_label_set_text(wpm_label2, "words per min");
-    lv_obj_set_style_text_font(wpm_label2, &lv_font_montserrat_12, 0);
-    lv_obj_set_style_text_color(wpm_label2, dark_grey_color, 0);
+    lv_label_set_text(wpm_label, "words per min");
+    lv_obj_set_style_text_font(wpm_label, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_color(wpm_label, dark_grey_color, 0);
     
     // Align all the objects within the newly created widget.
-    lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(bar1, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(wpm_label2, LV_ALIGN_TOP_LEFT, 0, 25);
+    lv_obj_align(bar, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(wpm_label, LV_ALIGN_TOP_LEFT, 0, 25);
 
     // Temporarily hide them until we we ready to work on them.
-    lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(wpm_label, LV_OBJ_FLAG_HIDDEN);
-    //lv_obj_add_flag(bar1, LV_OBJ_FLAG_HIDDEN);    
+    lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);    
 
     // Create the wmp_object assigning the objects created in this function to the wpm_object.
     wpm_object = (struct wpm_object){
-            .symbol = image_canvas,
-            .label = wpm_label,
-            .bar = bar1,
+            .bar = bar,
     };
 
     sys_slist_append(&widgets, &widget->node);
