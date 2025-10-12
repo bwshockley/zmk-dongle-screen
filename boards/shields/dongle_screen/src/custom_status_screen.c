@@ -93,7 +93,7 @@ lv_obj_t *zmk_display_status_screen()
 
 #if CONFIG_DONGLE_SCREEN_MODIFIER_ACTIVE
     zmk_widget_mod_status_init(&mod_widget, screen);
-    lv_obj_align(zmk_widget_mod_status_obj(&mod_widget), LV_ALIGN_RIGHT_MID, 20, 0);
+    lv_obj_align(zmk_widget_mod_status_obj(&mod_widget), LV_ALIGN_RIGHT_MID, 10, 0);
 #endif
 
     return screen;
