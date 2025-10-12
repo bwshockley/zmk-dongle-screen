@@ -62,9 +62,6 @@ lv_obj_t *zmk_display_status_screen()
     lv_style_set_text_letter_space(&global_style, 1);
     lv_style_set_text_line_space(&global_style, 1);
     lv_obj_add_style(screen, &global_style, LV_PART_MAIN);
-
-    zmk_widget_brightness_status_init(&brightness_status_widget, screen);
-    lv_obj_align(zmk_widget_brightness_status_obj(&brightness_status_widget), LV_ALIGN_CENTER, 0, 0);
     
 #if CONFIG_DONGLE_SCREEN_OUTPUT_ACTIVE
     zmk_widget_output_status_init(&output_status_widget, screen);
@@ -102,6 +99,9 @@ lv_obj_t *zmk_display_status_screen()
     zmk_widget_mod_status_init(&mod_widget, screen);
     lv_obj_align(zmk_widget_mod_status_obj(&mod_widget), LV_ALIGN_RIGHT_MID, 0, 0);
 #endif
+    
+    zmk_widget_brightness_status_init(&brightness_status_widget, screen);
+    lv_obj_align(zmk_widget_brightness_status_obj(&brightness_status_widget), LV_ALIGN_CENTER, 0, 0);
 
     return screen;
 }
