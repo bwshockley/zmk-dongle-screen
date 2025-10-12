@@ -88,7 +88,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
 {
     // Create the widget and set to parent.
     widget->obj = lv_obj_create(parent);
-    lv_obj_set_size(widget->obj, 240, 50);
+    lv_obj_set_size(widget->obj, 240, 40);
 
     // Create theobjects and assign each to the widget.
     lv_obj_t * bar = lv_bar_create(widget->obj);
