@@ -53,8 +53,8 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
 
     lv_style_init(&style_indic);
     lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
-    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
-    lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_YELLOW));
+    lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_YELLOW));
+    lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
     lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
     lv_style_set_radius(&style_indic, 8);
 
