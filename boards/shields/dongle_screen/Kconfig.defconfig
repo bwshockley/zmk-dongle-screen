@@ -169,12 +169,6 @@ config DONGLE_SCREEN_MODIFIER_ACTIVE
     help
       If the Modifier Widget should be active or not
 
-config DONGLE_SCREEN_SYSTEM
-	bool "System Icon Choice for GUI MOD
-	default 2
-	help
-	  1 = Linux, 2 = Windows, 0 or any other = Mac
-
 config DONGLE_SCREEN_LAYER_ACTIVE
     bool "Layer Widget active"
     default y
@@ -233,9 +227,10 @@ config DONGLE_SCREEN_BRIGHTNESS_MODIFIER
     range -99 99
     help
       The modifier to start the dongle with. Useful if you found a modifier comfortable for you. Espacially for ambient light. Otherwise no need to change.
+
 config DONGLE_SCREEN_SYSTEM_ICON
     int "The icon to display when the 'LGUI'/'RGUI' is pressed. (0: macOS, 1: Linux, 2: Windows)"
-    default 0
+    default 2
     range 0 2
     help
         The icon to display when the 'LGUI'/'RGUI' is pressed. Can be used to better match the Mod Widget to the underlying system.
