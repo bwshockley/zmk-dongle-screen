@@ -417,7 +417,7 @@ static void increase_brightness(void)
         brightness_modifier += safe_increase;
         LOG_DBG("Brightness modifier increased by %d to %d", safe_increase, brightness_modifier);
         set_screen_brightness(current_brightness, false);
-        update_brightness_status(&brightness_status_widget, current_brightness);
+        zmk_widget_update_brightness_status(&brightness_status_widget, current_brightness);
 
         // Check if we should turn screen on
         if (should_screen_turn_on(current_brightness, brightness_modifier) && off_through_modifier)
@@ -443,7 +443,7 @@ static void decrease_brightness(void)
         brightness_modifier += safe_decrease; // Adding a negative value decreases
         LOG_DBG("Brightness modifier decreased by %d to %d", -safe_decrease, brightness_modifier);
         set_screen_brightness(current_brightness, false);
-        update_brightness_status(&brightness_status_widget, current_brightness);
+        zmk_widget_update_brightness_status(&brightness_status_widget, current_brightness);
 
         // Check if we should turn screen off
         if (should_screen_turn_off(current_brightness, brightness_modifier))
