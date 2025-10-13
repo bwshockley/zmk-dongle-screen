@@ -2,6 +2,16 @@
 #include <lvgl.h>
 #include "brightness_status.h"
 
+#define BRIGHTNESS_STATUS_HIDE_DELAY_MS 300
+
+static void brightness_status_timer_cb(lv_timer_t *timer)
+{
+    struct zmk_widget_brightness_status *widget = (struct zmk_widget_brightness_status *)timer->user_data;
+    if (widget && widget->obj) {
+        lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    }
+    lv_timer_del(timer); // Clean up the timer after use
+}
 
 int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
 {
@@ -9,17 +19,14 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     snprintf(brightness_text, sizeof(brightness_text), "%i%%", brightness);
     lv_label_set_text(widget->label, brightness_text);
 
-    //lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    // Unhide the widget
+    lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
 
-    //lv_anim_t a;
-    //lv_anim_init(&a);
-    //lv_anim_set_var(&a, widget->obj);
-    //lv_anim_set_values(&a, LV_OPA_60, LV_OPA_TRANSP);
-    //lv_anim_set_time(&a, 300);
-    //lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_style_bg_opa);
-    //lv_anim_start(&a);
+    // Start a one-shot timer to hide the widget after 300ms
+    lv_timer_t *timer = lv_timer_create(brightness_status_timer_cb, BRIGHTNESS_STATUS_HIDE_DELAY_MS, widget);
+    lv_timer_set_repeat_count(timer, 1);
 
-    //lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    return 0;
 }
 
 int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widget, lv_obj_t *parent)
