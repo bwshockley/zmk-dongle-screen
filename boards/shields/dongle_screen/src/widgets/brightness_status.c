@@ -26,14 +26,12 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     // Setup fade-out animation
     lv_anim_t a;
     lv_anim_init(&a);
-    lv_anim_set_var(&a, widget->obj);
+    lv_anim_set_var(&a, widget);
     lv_anim_set_exec_cb(&a, brightness_status_fade_cb);
     lv_anim_set_values(&a, LV_OPA_60, LV_OPA_TRANSP);
-    lv_anim_set_time(&a, BRIGHTNESS_FADE_TIME_MS);
-    lv_anim_set_delay(&a, 0); // No delay before starting fade
-    lv_anim_set_path_cb(&a, lv_anim_path_linear);
-    lv_anim_set_ready_cb(&a, brightness_status_fade_end_cb); // Hide when done
-    //lv_anim_start(&a);
+    lv_anim_set_duration(&a, BRIGHTNESS_FADE_TIME_MS);
+    lv_anim_set_completed_cb(&a, brightness_status_fade_end_cb); // Hide when done
+    lv_anim_start(&a);
 
     return 0;
 }
