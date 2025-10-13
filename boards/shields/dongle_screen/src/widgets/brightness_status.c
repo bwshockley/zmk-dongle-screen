@@ -2,7 +2,7 @@
 #include <lvgl.h>
 #include "brightness_status.h"
 
-#define BRIGHTNESS_STATUS_HIDE_DELAY_MS 300
+#define BRIGHTNESS_STATUS_HIDE_DELAY_MS 500
 
 static void brightness_status_timer_cb(lv_timer_t *timer)
 {
