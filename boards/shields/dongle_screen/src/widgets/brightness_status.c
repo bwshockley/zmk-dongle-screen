@@ -4,11 +4,23 @@
 
 #define BRIGHTNESS_STATUS_HIDE_DELAY_MS 300
 
+static void brightness_status_fade_cb(void * obj, int32_t value)
+{
+    lv_obj_set_style_opa((lv_obj_t *)obj, value, LV_PART_MAIN);
+}
+
 static void brightness_status_timer_cb(lv_timer_t *timer)
 {
     struct zmk_widget_brightness_status *widget = (struct zmk_widget_brightness_status *)timer->user_data;
     if (widget && widget->obj) {
-        lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+        // Setup fade-out animation
+        lv_anim_t a;
+        lv_anim_init(&a);
+        lv_anim_set_var(&a, widget->obj);
+        lv_anim_set_exec_cb(&a, brightness_status_fade_cb);
+        lv_anim_set_values(&a, LV_OPA_COVER, LV_OPA_TRANSP);
+        lv_anim_set_time(&a, BRIGHTNESS_FADE_TIME_MS);
+        lv_anim_start(&a);
     }
     lv_timer_del(timer); // Clean up the timer after use
 }
@@ -20,7 +32,8 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     lv_label_set_text(widget->label, brightness_text);
 
     // Unhide the widget
-    lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    //lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_style_opa(widget->obj, LV_OPA_COVER, LV_PART_MAIN);
 
     // Start a one-shot timer to hide the widget after 300ms
     lv_timer_t *timer = lv_timer_create(brightness_status_timer_cb, BRIGHTNESS_STATUS_HIDE_DELAY_MS, widget);
@@ -33,18 +46,15 @@ int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widge
 {
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 280);
-
-    static lv_style_t bg_style;
-    lv_style_init(&bg_style);
-    lv_style_set_bg_color(&bg_style, lv_color_black());
-    lv_style_set_bg_opa(&bg_style, LV_OPA_60);
-    lv_obj_add_style(widget->obj, &bg_style, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(widget->obj, lv_color_black(), 0);
+    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_60, 0);
 
     widget->label = lv_label_create(widget->obj);
     lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(widget->label, "50%");
     lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_48, 0);
-    lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    
+    lv_obj_set_style_opa(widget->obj, LV_OPA_TRANSP, LV_PART_MAIN);
     return 0;
 }
 
