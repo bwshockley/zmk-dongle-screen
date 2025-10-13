@@ -3,7 +3,7 @@
 #include "brightness_status.h"
 
 #define BRIGHTNESS_STATUS_HIDE_DELAY_MS 300
-#define BRIGHTNESS_FADE_TIME_M 500
+#define BRIGHTNESS_FADE_TIME_MS 500
 
 static void brightness_status_fade_cb(void * obj, int32_t value)
 {
