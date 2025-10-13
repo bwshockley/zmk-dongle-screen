@@ -9,6 +9,9 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "widgets/brightness_status.h"
+static struct zmk_widget_brightness_status brightness_status_widget;
+
 int random0to100()
 {
     return rand() % 101; // 0 to 100
