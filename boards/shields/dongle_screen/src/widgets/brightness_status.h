@@ -11,4 +11,5 @@ struct zmk_widget_brightness_status
 };
 
 int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widget, lv_obj_t *parent);
+int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness);
 lv_obj_t *zmk_widget_brightness_status_obj(struct zmk_widget_brightness_status *widget);
