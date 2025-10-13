@@ -30,7 +30,7 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     lv_anim_set_exec_cb(&a, brightness_status_fade_cb);
     lv_anim_set_values(&a, LV_OPA_60, LV_OPA_TRANSP);
     lv_anim_set_time(&a, BRIGHTNESS_FADE_TIME_MS);
-    lv_anim_set_completed_cb(&a, brightness_status_fade_end_cb);
+    //lv_anim_set_completed_cb(&a, brightness_status_fade_end_cb);
     lv_anim_start(&a);
 
     return 0;
