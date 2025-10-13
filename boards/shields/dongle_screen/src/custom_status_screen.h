@@ -9,4 +9,6 @@
 
 #include <lvgl.h>
 
+extern struct zmk_widget_brightness_status brightness_status_widget;
+
 lv_obj_t *zmk_display_status_screen();
