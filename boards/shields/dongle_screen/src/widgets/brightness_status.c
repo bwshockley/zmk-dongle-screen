@@ -21,7 +21,7 @@ static void brightness_status_timer_cb(lv_timer_t *timer)
         lv_anim_set_exec_cb(&a, brightness_status_fade_cb);
         lv_anim_set_values(&a, LV_OPA_COVER, LV_OPA_TRANSP);
         lv_anim_set_time(&a, BRIGHTNESS_FADE_TIME_MS);
-        lv_anim_start(&a);
+        //lv_anim_start(&a);
     }
     lv_timer_del(timer); // Clean up the timer after use
 }
