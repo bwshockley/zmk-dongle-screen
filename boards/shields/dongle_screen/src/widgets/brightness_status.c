@@ -9,6 +9,7 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     lv_label_set_text(widget->label, brightness_text);
 
     lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_opa_scale_enable(widget->obj, true)
 
     //lv_anim_t a;
     //lv_anim_init(&a);
