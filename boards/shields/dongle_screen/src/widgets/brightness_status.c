@@ -2,6 +2,11 @@
 #include <lvgl.h>
 #include "brightness_status.h"
 
+static void anim_opa_cb(void * var, int32_t v)
+{
+    lv_obj_set_x((lv_obj_t *) var, v);
+}
+
 int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
 {
     char brightness_text[8] = {};
@@ -9,7 +14,7 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     lv_label_set_text(widget->label, brightness_text);
 
     lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
-    //lv_obj_set_opa_scale_enable(widget->obj, true);
+    lv_obj_set_opa_scale_enable(widget->obj, true);
 
     //lv_anim_t a;
     //lv_anim_init(&a);
