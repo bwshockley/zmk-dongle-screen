@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #include "widgets/brightness_status.h"
-static struct zmk_widget_brightness_status brightness_status_widget;
+#include "custom_status_screen.h"
 
 int random0to100()
 {
