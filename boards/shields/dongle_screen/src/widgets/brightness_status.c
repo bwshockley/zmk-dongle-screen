@@ -19,7 +19,7 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     //lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_opa_scale);
     //lv_anim_start(&a);
 
-     lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
+    //lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
 }
 
 int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widget, lv_obj_t *parent)
