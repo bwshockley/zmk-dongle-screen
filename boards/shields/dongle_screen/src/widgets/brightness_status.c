@@ -6,7 +6,7 @@
 
 static void brightness_status_fade_cb(void * obj, int32_t value)
 {
-    lv_obj_set_style_bg_opa((lv_obj_t *)obj, value, LV_PART_MAIN);
+    lv_obj_set_style_opa((lv_obj_t *)obj, value, LV_PART_MAIN);
 }
 
 static void brightness_status_fade_end_cb(lv_anim_t * a)
@@ -40,17 +40,14 @@ int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widge
 {
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 280);
-
-    static lv_style_t bg_style;
-    lv_style_init(&bg_style);
-    lv_style_set_bg_color(&bg_style, lv_color_black());
-    lv_style_set_bg_opa(&bg_style, LV_OPA_60);
-    lv_obj_add_style(widget->obj, &bg_style, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(widget->obj, lv_color_black(), 0);
+    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_60, 0);
 
     widget->label = lv_label_create(widget->obj);
     lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(widget->label, "50%");
+    lv_label_set_text(widget->label, "");
     lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_48, 0);
+    
     lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
     return 0;
 }
