@@ -8,7 +8,7 @@
 
 
 #include "widgets/brightness_status.h"
-static struct zmk_widget_brightness_status brightness_status_widget;
+struct zmk_widget_brightness_status brightness_status_widget;
 
 #if CONFIG_DONGLE_SCREEN_OUTPUT_ACTIVE
 #include "widgets/output_status.h"
