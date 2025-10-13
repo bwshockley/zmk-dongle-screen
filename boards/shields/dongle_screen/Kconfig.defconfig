@@ -99,7 +99,7 @@ config DONGLE_SCREEN_IDLE_TIMEOUT_S
 
 config DONGLE_SCREEN_MAX_BRIGHTNESS
     int "Maximum screen brightness (1-100)"
-    default 80
+    default 100
     range 1 100
     help
         This is the brightness which is used when the dongle is powered on. This is also the maximum brightness used by the dimmer.
@@ -113,7 +113,7 @@ config DONGLE_SCREEN_MIN_BRIGHTNESS
 
 config DONGLE_SCREEN_DEFAULT_BRIGHTNESS
     int "Default screen brightness (0-100)"
-    default DONGLE_SCREEN_MAX_BRIGHTNESS
+    default 80
     range DONGLE_SCREEN_MIN_BRIGHTNESS DONGLE_SCREEN_MAX_BRIGHTNESS
     help
       The initial brightness level for the screen backlight.
