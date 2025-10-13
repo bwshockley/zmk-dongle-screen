@@ -305,7 +305,7 @@ void set_screen_brightness(uint8_t value, bool ambient)
 
     fade_to_brightness(current_effective, result.effective_brightness);
     current_brightness = result.adjusted_brightness;
-    zmk_widget_update_brightness_status(&brightness_status_widget, current_brightness);
+    zmk_widget_update_brightness_status(&brightness_status_widget, result.effective_brightness);
 }
 
 #if CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S > 0 || CONFIG_DONGLE_SCREEN_BRIGHTNESS_KEYBOARD_CONTROL
