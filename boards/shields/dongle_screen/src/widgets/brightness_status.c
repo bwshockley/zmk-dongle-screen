@@ -2,7 +2,7 @@
 #include <lvgl.h>
 #include "brightness_status.h"
 
-int update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
+int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
 {
     char brightness_text[8] = {};
     snprintf(brightness_text, sizeof(brightness_text), "%i", brightness);
