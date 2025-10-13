@@ -2,7 +2,7 @@
 #include <lvgl.h>
 #include "brightness_status.h"
 
-static void update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
+int update_brightness_status(struct zmk_widget_brightness_status *widget, uint8_t brightness)
 {
     char brightness_text[8] = {};
     snprintf(brightness_text, sizeof(brightness_text), "%i", brightness);
@@ -12,11 +12,13 @@ static void update_brightness_status(struct zmk_widget_brightness_status *widget
 
     lv_anim_t a;
     lv_anim_init(&a);
-    lv_anim_set_var(&a, widget);
+    lv_anim_set_var(&a, widget->obj);
     lv_anim_set_values(&a, LV_OPA_COVER, LV_OPA_TRANSP);
     lv_anim_set_time(&a, 300);
-    lv_anim_set_exec_cb(&a, (lv_anim_exec_cb_t)lv_obj_set_opa_scale);
+    lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_opa_scale);
     lv_anim_start(&a);
+
+     lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
 }
 
 int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widget, lv_obj_t *parent)
@@ -35,10 +37,6 @@ int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widge
     lv_label_set_text(widget->label, "50%");
     lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_48, 0);
     lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
-
-Copied!
-Skip to content
-Navigation Menu
 
 
     return 0;
