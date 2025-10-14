@@ -8,10 +8,12 @@
 
 #include <fonts.h>
 
-#include <zephyr/logging/log.h>
+t#include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static char layer_names_buffer[256] = {0}; // Buffer for concatenated layer names
+
+static int layer_select_id[6] = {3, 1, 2, 4, 5, 0}; // Display order of layers.  TODO - setup an better way to handle this?  If we change layers, need to manually map again.
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -20,7 +22,7 @@ struct layer_roller_state {
 };
 
 static void layer_roller_set_sel(lv_obj_t *roller, struct layer_roller_state state) {
-    lv_roller_set_selected(roller, state.index, LV_ANIM_ON);
+    lv_roller_set_selected(roller, layer_select_id[state.index], LV_ANIM_ON);
 }
 
 static void layer_roller_update_cb(struct layer_roller_state state) {
@@ -32,7 +34,6 @@ static void layer_roller_update_cb(struct layer_roller_state state) {
 
 static struct layer_roller_state layer_roller_get_state(const zmk_event_t *eh) {
     uint8_t index = zmk_keymap_highest_layer_active();
-    LOG_INF("Roller set to: %d", index);
     return (struct layer_roller_state){
         .index = index,
     };
@@ -96,32 +97,53 @@ static void mask_event_cb(lv_event_t * e)
 int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_t *parent) {
     widget->obj = lv_roller_create(parent);
 
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_bg_color(&style, lv_color_black());
+    lv_style_set_text_color(&style, lv_color_white());
+    lv_style_set_border_width(&style, 0);
+    lv_style_set_pad_all(&style, 0);
+    lv_obj_add_style(widget->obj, &style, 0);
+
+    // Set the background opacity, text size, and color for the selected layer.
+    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);        
+    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
+
+    // Set the text size and color of the non-selected layers.
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_30, LV_PART_MAIN);
+    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x111111), LV_PART_MAIN);
+
     layer_names_buffer[0] = '\0';
     char *ptr = layer_names_buffer;
 
     for (int i = 0; i < ZMK_KEYMAP_LAYERS_LEN; i++) {
-        const char *layer_name = zmk_keymap_layer_name(zmk_keymap_layer_index_to_id(i));
+        const char *layer_name = zmk_keymap_layer_name(zmk_keymap_layer_index_to_id(layer_ids[i]));
         if (layer_name) {
+
+            // For each layer name after the first layer name and a newline.
             if (i > 0) {
                 strcat(ptr, "\n");
                 ptr += strlen(ptr);
             }
 
             if (layer_name && *layer_name) { //is both valid and points to a non-empty string
-#if IS_ENABLED(CONFIG_LAYER_ROLLER_ALL_CAPS)
+                // If the layer names should be all caps, modify them to be so.
+                #if IS_ENABLED(CONFIG_LAYER_ROLLER_ALL_CAPS)
                 while (*layer_name) {
                     *ptr = toupper((unsigned char)*layer_name);
                     ptr++;
                     layer_name++;
                 }
                 *ptr = '\0';
-#else
+                // Otherwise, just add the layer name directly to the buffer.
+                #else
                 strcat(ptr, layer_name);
                 ptr += strlen(layer_name);
-#endif
+            #endif
+            // If a layer doesn't have a name, just use the layer number.  Supports up to 99 layers.
             } else {
-                // Just use the number for unnamed layers
-                char index_str[12];
+                char index_str[2];
                 snprintf(index_str, sizeof(index_str), "%d", i);
                 strcat(ptr, index_str);
                 ptr += strlen(index_str);
@@ -130,23 +152,13 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     }
 
     lv_roller_set_options(widget->obj, layer_names_buffer, LV_ROLLER_MODE_NORMAL);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_bg_color(&style, lv_color_black());
-    lv_style_set_text_color(&style, lv_color_white());
-    lv_style_set_border_width(&style, 0);
-    lv_style_set_pad_all(&style, 0);
-    lv_obj_add_style(widget->obj, &style, 0);
-    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);        
-    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_30, LV_PART_MAIN);
-    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x111111), LV_PART_MAIN);
+    
     // lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_add_event_cb(widget->obj, mask_event_cb, LV_EVENT_ALL, NULL);
     lv_obj_set_style_anim_time(widget->obj, 300, 0);
+    
     sys_slist_append(&widgets, &widget->node);
+    
     widget_layer_roller_init();
     return 0;
 }
