@@ -156,7 +156,10 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     lv_roller_set_options(widget->obj, layer_names_buffer, LV_ROLLER_MODE_NORMAL);
     
     // lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_center(widget->obj);
+    lv_roller_set_visible_row_count(widget->obj, 3);
     lv_obj_add_event_cb(widget->obj, mask_event_cb, LV_EVENT_ALL, NULL);
+    
     lv_obj_set_style_anim_time(widget->obj, 300, 0);
     
     sys_slist_append(&widgets, &widget->node);
