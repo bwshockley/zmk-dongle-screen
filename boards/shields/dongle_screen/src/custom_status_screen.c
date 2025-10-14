@@ -78,22 +78,22 @@ lv_obj_t *zmk_display_status_screen()
     lv_obj_align(zmk_widget_wpm_status_obj(&wpm_status_widget), LV_ALIGN_TOP_LEFT, 25, 20);
 #endif
 
-
+/*
 #if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
     zmk_widget_layer_status_init(&layer_status_widget, screen);
     lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_LEFT_MID, 20, -10);
 #endif
+*/
 
-/*
 #if CONFIG_DONGLE_SCREEN_HID_INDICATORS_ACTIVE
     zmk_widget_hid_indicators_init(&hid_indicators_widget, screen);
     lv_obj_align(zmk_widget_hid_indicators_obj(&hid_indicators_widget), LV_ALIGN_LEFT_MID, 20, 20);
 #endif
-*/
+
 
 #if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
     zmk_widget_layer_roller_init(&layer_roller_widget, screen);
-    lv_obj_align(zmk_widget_layer_roller_obj(&layer_roller_widget), LV_ALIGN_LEFT_MID, 20, 20);
+    lv_obj_align(zmk_widget_layer_roller_obj(&layer_roller_widget), LV_ALIGN_LEFT_MID, 20, -10);
 #endif
 
 
