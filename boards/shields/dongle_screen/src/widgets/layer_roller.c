@@ -13,7 +13,9 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static char layer_names_buffer[256] = {0}; // Buffer for concatenated layer names
 
-static int layer_select_id[6] = {3, 1, 2, 4, 5, 0}; // Display order of layers.  TODO - setup an better way to handle this?  If we change layers, need to manually map again.
+static int layer_select_id[6] = {3, 1, 2, 4, 5, 0}; // Select order of layers.
+
+static int layer_display_order[6] = {5, 1, 2, 0, 3, 4}; // Display order of layers.
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -118,7 +120,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     char *ptr = layer_names_buffer;
 
     for (int i = 0; i < ZMK_KEYMAP_LAYERS_LEN; i++) {
-        const char *layer_name = zmk_keymap_layer_name(zmk_keymap_layer_index_to_id(layer_ids[i]));
+        const char *layer_name = zmk_keymap_layer_name(zmk_keymap_layer_index_to_id(layer_display_order[i]));
         if (layer_name) {
 
             // For each layer name after the first layer name and a newline.
