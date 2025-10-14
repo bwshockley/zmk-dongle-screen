@@ -8,7 +8,7 @@
 
 #include <fonts.h>
 
-t#include <zephyr/logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static char layer_names_buffer[256] = {0}; // Buffer for concatenated layer names
