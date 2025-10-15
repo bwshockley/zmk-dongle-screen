@@ -64,7 +64,7 @@ endchoice
 config LV_FONT_MONTSERRAT_12
     default y
 
-config LV_FONT_MONTSERRAT_34
+config LV_FONT_MONTSERRAT_36
     default y
 
 config LV_FONT_MONTSERRAT_40
