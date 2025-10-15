@@ -70,7 +70,8 @@ static void mask_event_cb(lv_event_t * e)
         rect_area.x1 = roller_coords.x1;
         rect_area.x2 = roller_coords.x2;
         rect_area.y1 = roller_coords.y1;
-        rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h - line_space) / 2;
+        // rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h - line_space) / 2;
+        rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h) / 2;
 
         lv_draw_mask_fade_param_t * fade_mask_top = lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
         lv_draw_mask_fade_init(fade_mask_top, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
@@ -118,7 +119,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
 
     // Set the text size and color of the non-selected layers.
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_20, LV_PART_MAIN);
-    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x000011), LV_PART_MAIN);
+    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x111111), LV_PART_MAIN);
 
     layer_names_buffer[0] = '\0';
     char *ptr = layer_names_buffer;
