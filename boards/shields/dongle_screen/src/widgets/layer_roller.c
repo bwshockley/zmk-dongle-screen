@@ -104,15 +104,14 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     lv_style_init(&style);
     lv_style_set_bg_color(&style, lv_color_black());
     lv_style_set_text_color(&style, lv_color_white());
-    lv_style_set_text_line_space(&style, 10);
+    lv_style_set_text_line_space(&style, 15);
     lv_style_set_border_width(&style, 0);
     lv_style_set_pad_all(&style, 0);
     lv_obj_add_style(widget->obj, &style, 0);
 
     // Set the background opacity, text size, and color for the selected layer.
-    lv_obj_align(widget->obj, LV_ALIGN_LEFT_MID, 0, 5);
-    lv_roller_set_visible_row_count(widget->obj, 2);
-    lv_obj_set_style_text_align(widget->obj, LV_TEXT_ALIGN_CENTER, LV_PART_SELECTED);
+    lv_roller_set_visible_row_count(widget->obj, 3);
+    lv_obj_set_style_text_align(widget->obj, LV_TEXT_LEFT_MID, LV_PART_SELECTED);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);   
     lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
