@@ -98,19 +98,19 @@ static void mask_event_cb(lv_event_t * e)
 
 int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_t *parent) {
     widget->obj = lv_roller_create(parent);
-    lv_obj_set_size(widget->obj, 240, 50);
+    lv_obj_set_size(widget->obj, 240, 80);
 
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_bg_color(&style, lv_color_black());
     lv_style_set_text_color(&style, lv_color_white());
-    lv_style_set_text_line_space(&style, 1);
+    lv_style_set_text_line_space(&style, 10);
     lv_style_set_border_width(&style, 0);
     lv_style_set_pad_all(&style, 0);
     lv_obj_add_style(widget->obj, &style, 0);
 
     // Set the background opacity, text size, and color for the selected layer.
-    lv_obj_align(widget->obj, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_obj_align(widget->obj, LV_ALIGN_LEFT_MID, 0, 5);
     lv_roller_set_visible_row_count(widget->obj, 2);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);   
