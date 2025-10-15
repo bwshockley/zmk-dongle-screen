@@ -105,7 +105,7 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     lv_style_init(&style);
     lv_style_set_bg_color(&style, lv_color_black());
     lv_style_set_text_color(&style, lv_color_white());
-    lv_style_set_text_line_space(&style, 15);
+    //lv_style_set_text_line_space(&style, 15);
     lv_style_set_border_width(&style, 0);
     lv_style_set_pad_all(&style, 0);
     lv_obj_add_style(widget->obj, &style, 0);
@@ -114,11 +114,11 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     lv_roller_set_visible_row_count(widget->obj, 3);
     lv_obj_set_style_text_align(widget->obj, LV_ALIGN_LEFT_MID, LV_PART_SELECTED);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, LV_PART_SELECTED);   
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_30, LV_PART_SELECTED);   
     lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
 
     // Set the text size and color of the non-selected layers.
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_20, LV_PART_MAIN);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_30, LV_PART_MAIN);
     lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x111111), LV_PART_MAIN);
 
     layer_names_buffer[0] = '\0';
