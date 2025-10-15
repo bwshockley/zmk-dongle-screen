@@ -70,6 +70,9 @@ config LV_FONT_MONTSERRAT_32
 config LV_FONT_MONTSERRAT_36
     default y
 
+config LV_FONT_MONTSERRAT_40
+    default y
+
 config LV_FONT_MONTSERRAT_48
     default y
 
