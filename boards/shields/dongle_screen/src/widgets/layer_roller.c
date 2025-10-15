@@ -98,7 +98,7 @@ static void mask_event_cb(lv_event_t * e)
 
 int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_t *parent) {
     widget->obj = lv_roller_create(parent);
-    lv_obj_set_size(widget->obj, 240, 80);
+    lv_obj_set_size(widget->obj, 240, 40);
 
     static lv_style_t style;
     lv_style_init(&style);
