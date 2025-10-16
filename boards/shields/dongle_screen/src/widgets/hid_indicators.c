@@ -19,6 +19,9 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define LED_CLCK 0x02
 #define LED_SLCK 0x04
 
+#define LOCK "\xEF\x80\xA3"
+#define UNLOCK "\xEF\x8F\x81"
+
 // Add LVGL color includes
 #include <lvgl.h>
 
@@ -42,7 +45,8 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     lv_color_t scroll_color = scroll ? active_color : inactive_color;
 
     // Set label colors and text
-    lv_label_set_text(widget->caps_label, "CAPS");
+    lv_label_set_text(widget->caps_label, LOCK "CAPS");
+    lv_obj_set_style_text_font(widget->caps_label, icons_lvgl);
     lv_obj_set_style_text_color(widget->caps_label, caps_color, 0);
 
     lv_label_set_text(widget->num_label, "NUM");
