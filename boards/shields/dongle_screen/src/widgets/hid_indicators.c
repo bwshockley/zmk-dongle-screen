@@ -42,20 +42,34 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     bool num = state.hid_indicators & LED_NLCK;
     bool scroll = state.hid_indicators & LED_SLCK;
 
+    // Set the color based on active or inavtive.
     lv_color_t caps_color = caps ? active_color : inactive_color;
     lv_color_t num_color = num ? active_color : inactive_color;
     lv_color_t scroll_color = scroll ? active_color : inactive_color;
 
+    // Set the icon based on locked or unlocked.
+    cap_icon_choice = caps ? LOCK : UNLOCK;
+    num_icon_choice = num ? LOCK : UNLOCK;
+    scr_icon_choice = scroll ? LOCK : UNLOCK;
+
     // Set label colors and text
     lv_obj_set_style_text_font(widget->caps_icon, &icons_lvgl, 0);
     lv_obj_set_style_text_color(widget->caps_icon, caps_color, 0);
-    lv_label_set_text(widget->caps_icon, LOCK);
+    lv_label_set_text(widget->caps_icon, cap_icon_choice);
     
     lv_obj_set_style_text_color(widget->caps_label, caps_color, 0);
     lv_label_set_text(widget->caps_label, "CAPS");
 
+    lv_obj_set_style_text_font(widget->num_icon, &icons_lvgl, 0);
+    lv_obj_set_style_text_color(widget->num_icon, num_color, 0);
+    lv_label_set_text(widget->num_icon, num_icon_choice);
+    
     lv_label_set_text(widget->num_label, "NUM");
     lv_obj_set_style_text_color(widget->num_label, num_color, 0);
+
+    lv_obj_set_style_text_font(widget->scroll_icon, &icons_lvgl, 0);
+    lv_obj_set_style_text_color(widget->scroll_icon, scroll_color, 0);
+    lv_label_set_text(widget->scroll_icon, scr_icon_choice);
 
     lv_label_set_text(widget->scroll_label, "SCROLL");
     lv_obj_set_style_text_color(widget->scroll_label, scroll_color, 0);
@@ -93,12 +107,17 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     widget->caps_label = lv_label_create(widget->cont);
     widget->caps_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->caps_icon, LV_ALIGN_TOP_RIGHT, 0, 0);
-    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_RIGHT, -15, 0);
+    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_RIGHT, -20, 0);
     
     widget->num_label = lv_label_create(widget->cont);
-    lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 50, 0);
+    widget->num_icon = lv_label_create(widget->cont);
+    lv_obj_align(widget->num_icon, LV_ALIGN_TOP_RIGHT, 0, 25);
+    lv_obj_align(widget->num_label, LV_ALIGN_TOP_RIGHT, -20, 25);
+
     widget->scroll_label = lv_label_create(widget->cont);
-    lv_obj_align(widget->scroll_label, LV_ALIGN_LEFT_MID, 95, 0);
+    widget->scroll_icon = lv_label_create(widget->cont);
+    lv_obj_align(widget->scroll_icon, LV_ALIGN_TOP_RIGHT, 0, 50);
+    lv_obj_align(widget->scroll_label, LV_ALIGN_TOP_RIGHT, -20, 50);
 
     // Optional: add some spacing between labels
     // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
