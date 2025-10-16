@@ -27,6 +27,12 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
     #define SOURCE_OFFSET 0
 #endif
 
+#define BATT_BAR_LENGTH 120
+#define BATT_BAR_HEIGHT 16
+
+#define BATT_BAR_MAX 100
+#define BATT_BAR_MIN 0
+
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 struct battery_state {
@@ -122,14 +128,14 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Wake screen on reconnection
     if (reconnecting) {
-#if CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S > 0    
+        #if CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S > 0    
         LOG_INF("Peripheral %d reconnected (battery: %d%%), requesting screen wake", 
                 state.source, state.level);
         brightness_wake_screen_on_reconnect();
-#else 
+        #else 
         LOG_INF("Peripheral %d reconnected (battery: %d%%)", 
                 state.source, state.level);
-#endif
+        #endif
     }
 
 
@@ -189,9 +195,9 @@ static struct battery_state central_battery_status_get_state(const zmk_event_t *
     return (struct battery_state) {
         .source = 0,
         .level = (ev != NULL) ? ev->state_of_charge : zmk_battery_state_of_charge(),
-#if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
+        #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
         .usb_present = zmk_usb_is_powered(),
-#endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
+        #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
     };
 }
 
@@ -220,14 +226,19 @@ ZMK_SUBSCRIPTION(widget_dongle_battery_status, zmk_usb_conn_state_changed);
 
 int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_status *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
-
     lv_obj_set_size(widget->obj, 240, 40);
     
     for (int i = 0; i < ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET; i++) {
-        lv_obj_t *image_canvas = lv_canvas_create(widget->obj);
-        lv_obj_t *battery_label = lv_label_create(widget->obj);
+        lv_obj_t * bar = lv_bar_create(widget->obj);
+        lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
+        lv_obj_t * battery_label = lv_label_create(widget->obj);
 
         lv_canvas_set_buffer(image_canvas, battery_image_buffer[i], 102, 5, LV_IMG_CF_TRUE_COLOR);
+
+        lv_obj_set_size(bar, BATT_BAR_LENGTH, BATT_BAR_HEIGHT);
+        lv_bar_set_range(bar, BATT_BAR_MIN, BATT_BAR_MAX);
+        lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), 0);
 
         lv_obj_align(image_canvas, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -8);
         lv_obj_align(battery_label, LV_ALIGN_TOP_MID, -60 +(i * 120), 0);
@@ -236,6 +247,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_add_flag(battery_label, LV_OBJ_FLAG_HIDDEN);
         
         battery_objects[i] = (struct battery_object){
+            .bar = battery_bar,
             .symbol = image_canvas,
             .label = battery_label,
         };
