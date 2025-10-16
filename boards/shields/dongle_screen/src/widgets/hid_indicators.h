@@ -14,7 +14,9 @@ struct zmk_widget_hid_indicators {
     lv_obj_t *caps_label;
     lv_obj_t *caps_icon;
     lv_obj_t *num_label;
+    lv_obj_t *num_icon;
     lv_obj_t *scroll_label;
+    lv_obj_t *scroll_icon;
     sys_snode_t node;
 };
 
