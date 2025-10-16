@@ -48,9 +48,9 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     lv_color_t scroll_color = scroll ? active_color : inactive_color;
 
     // Set the icon based on locked or unlocked.
-    const char* cap_icon_choice[12] = caps ? LOCK : UNLOCK;
-    const char* num_icon_choice[12] = num ? LOCK : UNLOCK;
-    const char* scr_icon_choice[12] = scroll ? LOCK : UNLOCK;
+    const char* cap_icon_choice = caps ? LOCK : UNLOCK;
+    const char* num_icon_choice = num ? LOCK : UNLOCK;
+    const char* scr_icon_choice = scroll ? LOCK : UNLOCK;
 
     // Set label colors and text
     lv_obj_set_style_text_font(widget->caps_icon, &icons_lvgl, 0);
