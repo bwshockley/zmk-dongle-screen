@@ -58,7 +58,7 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     lv_label_set_text(widget->caps_icon, cap_icon_choice);
     
     lv_obj_set_style_text_color(widget->caps_label, caps_color, 0);
-    lv_label_set_text(widget->caps_label, "CAPS");
+    lv_label_set_text(widget->caps_label, "CAP");
 
     lv_obj_set_style_text_font(widget->num_icon, &icons_lvgl, 0);
     lv_obj_set_style_text_color(widget->num_icon, num_color, 0);
@@ -71,7 +71,7 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     lv_obj_set_style_text_color(widget->scroll_icon, scroll_color, 0);
     lv_label_set_text(widget->scroll_icon, scr_icon_choice);
 
-    lv_label_set_text(widget->scroll_label, "SCROLL");
+    lv_label_set_text(widget->scroll_label, "SCR");
     lv_obj_set_style_text_color(widget->scroll_label, scroll_color, 0);
 }
 
@@ -107,17 +107,17 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     widget->caps_label = lv_label_create(widget->cont);
     widget->caps_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->caps_icon, LV_ALIGN_TOP_RIGHT, 0, 0);
-    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_RIGHT, -20, 0);
+    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_RIGHT, -25, 3);
     
     widget->num_label = lv_label_create(widget->cont);
     widget->num_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->num_icon, LV_ALIGN_TOP_RIGHT, 0, 25);
-    lv_obj_align(widget->num_label, LV_ALIGN_TOP_RIGHT, -20, 25);
+    lv_obj_align(widget->num_label, LV_ALIGN_TOP_RIGHT, -25, 28);
 
     widget->scroll_label = lv_label_create(widget->cont);
     widget->scroll_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->scroll_icon, LV_ALIGN_TOP_RIGHT, 0, 50);
-    lv_obj_align(widget->scroll_label, LV_ALIGN_TOP_RIGHT, -20, 50);
+    lv_obj_align(widget->scroll_label, LV_ALIGN_TOP_RIGHT, -25, 53);
 
     // Optional: add some spacing between labels
     // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
