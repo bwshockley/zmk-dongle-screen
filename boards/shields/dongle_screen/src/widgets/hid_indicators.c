@@ -47,10 +47,10 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     lv_color_t scroll_color = scroll ? active_color : inactive_color;
 
     // Set label colors and text
-    lv_label_set_text(widget->caps_label, LOCK "CAPS");
     lv_obj_set_style_text_font(widget->caps_icon, &icons_lvgl, 0);
     lv_obj_set_style_text_color(widget->caps_icon, caps_color, 0);
     lv_label_set_text(widget->caps_icon, LOCK);
+    
     lv_obj_set_style_text_color(widget->caps_label, caps_color, 0);
     lv_label_set_text(widget->caps_label, "CAPS");
 
@@ -94,6 +94,7 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     widget->caps_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->caps_icon, LV_ALIGN_LEFT_MID, 0, 0);
     lv_obj_align(widget->caps_label, LV_ALIGN_LEFT_MID, 15, 0);
+    
     widget->num_label = lv_label_create(widget->cont);
     lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 50, 0);
     widget->scroll_label = lv_label_create(widget->cont);
