@@ -83,17 +83,17 @@ ZMK_SUBSCRIPTION(widget_hid_indicators, zmk_hid_indicators_changed);
 int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_obj_t *parent) {
     // Create horizontal container
     widget->cont = lv_obj_create(parent);
-    lv_obj_set_size(widget->cont, 240, 40);
+    lv_obj_set_size(widget->cont, 80, 80);
     lv_obj_set_style_border_width(widget->cont, 0, 0);
     lv_obj_set_style_pad_all(widget->cont, 0, 0);
     lv_obj_set_style_bg_opa(widget->cont, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_text_font(widget->cont, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_font(widget->cont, &lv_font_montserrat_20, 0);
 
     // Add labels
     widget->caps_label = lv_label_create(widget->cont);
     widget->caps_icon = lv_label_create(widget->cont);
-    lv_obj_align(widget->caps_icon, LV_ALIGN_LEFT_MID, 0, 0);
-    lv_obj_align(widget->caps_label, LV_ALIGN_LEFT_MID, 15, 0);
+    lv_obj_align(widget->caps_icon, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_RIGHT, -15, 0);
     
     widget->num_label = lv_label_create(widget->cont);
     lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 50, 0);
