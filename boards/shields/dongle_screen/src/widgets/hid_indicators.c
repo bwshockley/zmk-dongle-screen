@@ -13,6 +13,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/event_manager.h>
 #include <zmk/events/hid_indicators_changed.h>
 
+#include <fonts.h>
+
 #include "hid_indicators.h"
 
 #define LED_NLCK 0x01
@@ -46,7 +48,7 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
 
     // Set label colors and text
     lv_label_set_text(widget->caps_label, LOCK "CAPS");
-    lv_obj_set_style_text_font(widget->caps_label, icons_lvgl);
+    lv_obj_set_style_text_font(widget->caps_label, &icons_lvgl, 0);
     lv_obj_set_style_text_color(widget->caps_label, caps_color, 0);
 
     lv_label_set_text(widget->num_label, "NUM");
