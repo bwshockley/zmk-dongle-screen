@@ -48,8 +48,11 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
 
     // Set label colors and text
     lv_label_set_text(widget->caps_label, LOCK "CAPS");
-    lv_obj_set_style_text_font(widget->caps_label, &icons_lvgl, 0);
+    lv_obj_set_style_text_font(widget->caps_icon, &icons_lvgl, 0);
+    lv_obj_set_style_text_color(widget->caps_icon, caps_color, 0);
+    lv_label_set_text(widget->caps_icon, LOCK);
     lv_obj_set_style_text_color(widget->caps_label, caps_color, 0);
+    lv_label_set_text(widget->caps_label, "CAPS");
 
     lv_label_set_text(widget->num_label, "NUM");
     lv_obj_set_style_text_color(widget->num_label, num_color, 0);
@@ -88,7 +91,9 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
 
     // Add labels
     widget->caps_label = lv_label_create(widget->cont);
-    lv_obj_align(widget->caps_label, LV_ALIGN_LEFT_MID, 0, 0);
+    widget->caps_icon = lv_label_create(widget->cont);
+    lv_obj_align(widget->caps_icon, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_obj_align(widget->caps_label, LV_ALIGN_LEFT_MID, 15, 0);
     widget->num_label = lv_label_create(widget->cont);
     lv_obj_align(widget->num_label, LV_ALIGN_LEFT_MID, 50, 0);
     widget->scroll_label = lv_label_create(widget->cont);
