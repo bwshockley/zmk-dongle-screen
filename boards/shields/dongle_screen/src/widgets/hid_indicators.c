@@ -107,17 +107,17 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     widget->caps_label = lv_label_create(widget->cont);
     widget->caps_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->caps_icon, LV_ALIGN_TOP_RIGHT, 0, 0);
-    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_RIGHT, -25, 3);
+    lv_obj_align(widget->caps_label, LV_ALIGN_TOP_LEFT, 0, 3);
     
     widget->num_label = lv_label_create(widget->cont);
     widget->num_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->num_icon, LV_ALIGN_TOP_RIGHT, 0, 25);
-    lv_obj_align(widget->num_label, LV_ALIGN_TOP_RIGHT, -25, 28);
+    lv_obj_align(widget->num_label, LV_ALIGN_TOP_LEFT, 0, 28);
 
     widget->scroll_label = lv_label_create(widget->cont);
     widget->scroll_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->scroll_icon, LV_ALIGN_TOP_RIGHT, 0, 50);
-    lv_obj_align(widget->scroll_label, LV_ALIGN_TOP_RIGHT, -25, 53);
+    lv_obj_align(widget->scroll_label, LV_ALIGN_TOP_LEFT, 0, 53);
 
     // Optional: add some spacing between labels
     // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
