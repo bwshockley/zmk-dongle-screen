@@ -13,7 +13,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static char layer_names_buffer[256] = {0}; // Buffer for concatenated layer names
 
-static int layer_select_id[6] = {3, 1, 2, 4, 5, 0}; // Select order of layers.
+static int layer_select_id[6] = {2, 4, 3, 1, 0, 5}; // Select order of layers.
 
 //static int layer_display_order[6] = {5, 1, 2, 0, 3, 4}; // Display order of layers.
 static int layer_display_order[6] = {4, 3, 0, 2, 1, 5}; // Display order of layers.
