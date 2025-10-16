@@ -4,4 +4,4 @@
 
 LV_FONT_DECLARE(NerdFonts_Regular_20);
 LV_FONT_DECLARE(NerdFonts_Regular_40);
-LV_FONT_DECLARE(icons_lvgl.c);
+LV_FONT_DECLARE(icons_lvgl);
