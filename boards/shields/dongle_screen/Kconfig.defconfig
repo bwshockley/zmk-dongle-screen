@@ -76,9 +76,6 @@ config LV_FONT_MONTSERRAT_36
 config LV_FONT_MONTSERRAT_40
     default y
 
-config LV_FONT_MONTSERRAT_48
-    default y
-
 config PWM
     default y
 
