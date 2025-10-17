@@ -85,51 +85,39 @@ static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
 
 static void event_cb(lv_event_t * e)
 {
-    //lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
-    //if(dsc->part != LV_PART_INDICATOR) return;
+    lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
+    if(dsc->part != LV_PART_INDICATOR) return;
 
-    lv_obj_t * bar = lv_event_get_target(e);
-    lv_obj_t * value_label = lv_bar_create(bar);
-    
-    lv_label_set_text_fmt(value_label, "HELLO %d", lv_bar_get_value(bar));
+    lv_obj_t * obj = lv_event_get_target(e);
 
-    // Get the bar's content area coordinates
-    lv_coord_t bar_width = lv_obj_get_width(bar);
-    lv_coord_t bar_value = lv_bar_get_value(bar);
-    lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
+    lv_draw_label_dsc_t label_dsc;
+    lv_draw_label_dsc_init(&label_dsc);
+    label_dsc.font = LV_FONT_DEFAULT;
 
-    // Calculate x-position based on bar value
-    lv_obj_center(value_label);
-    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_obj_get_width(value_label)) - 5);
+    char buf[8];
+    lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
 
-    //lv_draw_label_dsc_t label_dsc;
-    //lv_draw_label_dsc_init(&label_dsc);
-    //label_dsc.font = LV_FONT_DEFAULT;
+    lv_point_t txt_size;
+    lv_txt_get_size(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX, label_dsc.flag);
 
-    //char buf[8];
-    //lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
-
-    //lv_point_t txt_size;
-    //lv_txt_get_size(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX, label_dsc.flag);
-
-    //lv_area_t txt_area;
+    lv_area_t txt_area;
     /*If the indicator is long enough put the text inside on the right*/
-    //if(lv_area_get_width(dsc->draw_area) > txt_size.x + 20) {
-    //    txt_area.x2 = dsc->draw_area->x2 - 5;
-    //    txt_area.x1 = txt_area.x2 - txt_size.x + 1;
-    //    label_dsc.color = lv_color_white();
-    //}
+    if(lv_area_get_width(dsc->draw_area) > txt_size.x + 20) {
+        txt_area.x2 = dsc->draw_area->x2 - 5;
+        txt_area.x1 = txt_area.x2 - txt_size.x + 1;
+        label_dsc.color = lv_color_white();
+    }
     /*If the indicator is still short put the text out of it on the right*/
-    //else {
-    //    txt_area.x1 = dsc->draw_area->x2 + 5;
-    //    txt_area.x2 = txt_area.x1 + txt_size.x - 1;
-    //    label_dsc.color = lv_color_black();
-    //}
+    else {
+        txt_area.x1 = dsc->draw_area->x2 + 5;
+        txt_area.x2 = txt_area.x1 + txt_size.x - 1;
+        label_dsc.color = lv_color_black();
+    }
 
-    // txt_area.y1 = dsc->draw_area->y1 + (lv_area_get_height(dsc->draw_area) - txt_size.y) / 2;
-    //txt_area.y2 = txt_area.y1 + txt_size.y - 1;
+    txt_area.y1 = dsc->draw_area->y1 + (lv_area_get_height(dsc->draw_area) - txt_size.y) / 2;
+    txt_area.y2 = txt_area.y1 + txt_size.y - 1;
 
-    //lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
+    lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
 }
 
 static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
@@ -142,6 +130,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     
     // Update our tracking
     last_battery_levels[state.source] = state.level;
+
 
     // Wake screen on reconnection
     if (reconnecting) {
@@ -160,8 +149,9 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
+
     lv_bar_set_value(bar, state.level, LV_ANIM_OFF);
-    
+
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
         lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_RED), 0);
@@ -182,6 +172,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(bar);
+
 }
 
 void battery_status_update_cb(struct battery_state state) {
@@ -262,6 +253,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
+
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
