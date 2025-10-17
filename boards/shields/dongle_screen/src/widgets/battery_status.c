@@ -148,7 +148,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
-    lv_obj_t * value_label = lv_bar_create(widget->bar);
+    lv_obj_t * value_label = lv_bar_create(bar);
 
     lv_label_set_text_fmt(value_label, "%d", lv_bar_get_value(bar));
 
