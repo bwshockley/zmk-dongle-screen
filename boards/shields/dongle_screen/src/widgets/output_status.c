@@ -56,11 +56,11 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        //lv_obj_set_style_text_color(widget->usb_label, usb_color, 0);
+        lv_obj_set_style_text_color(widget->usb_label, usb_color, 0);
         lv_obj_set_style_text_color(widget->ble_label, inactive_color, 0);
         break;
     case ZMK_TRANSPORT_BLE:
-        //lv_obj_set_style_text_color(widget->usb_label, inactive_color, 0);
+        lv_obj_set_style_text_color(widget->usb_label, inactive_color, 0);
         lv_obj_set_style_text_color(widget->ble_label, ble_color, 0);
         break;
     }
