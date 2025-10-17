@@ -45,7 +45,7 @@ struct battery_state {
 };
 
 struct battery_object {
-    kv_obj_t * bar;
+    lv_obj_t * bar;
     lv_obj_t * symbol;
     lv_obj_t * label;
 } battery_objects[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
