@@ -148,6 +148,20 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
+    lv_obj_t * value_label = battery_objects[state.source].bar.label;
+
+    lv_label_set_text_fmt(value_label, "%d", lv_bar_get_value(bar));
+
+    // Get the bar's content area coordinates
+    lv_coord_t bar_width = lv_obj_get_width(bar);
+    lv_coord_t bar_value = lv_bar_get_value(bar);
+    lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
+
+    // Calculate x-position based on bar value
+    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_bar_get_min_value(bar)) / bar_range * bar_width) - lv_obj_get_width(value_label) - 5;
+
+    // Set the label's position
+    lv_obj_set_pos(value_label, label_x, lv_obj_get_height(bar) / 2 - lv_obj_get_height(value_label) / 2);
 
     lv_bar_set_value(bar, state.level, LV_ANIM_ON);
 
@@ -251,6 +265,8 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
+
+        lv_obj_t * label = lv_bar_create(widget->bar);
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
