@@ -28,7 +28,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #endif
 
 #define BATT_BAR_LENGTH 100
-#define BATT_BAR_HEIGHT 16
+#define BATT_BAR_HEIGHT 14
 
 #define BATT_BAR_MAX 100
 #define BATT_BAR_MIN 0
@@ -210,40 +210,10 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
         lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_GREEN), 0);
         lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR); 
     } else {
-        lv_obj_set_style_border_color(bar, pure_blue_color, 0);
-        lv_obj_set_style_bg_color(bar, pure_blue_color, LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_INDIGO), 0);
+        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_INDIGO), LV_PART_INDICATOR); 
     }
 
-    // Styling the label.
-    //if (state.level > 0) {
-    //    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-    //    lv_label_set_text_fmt(label, "%4u", state.level);
-    //} else {
-    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
-    //    lv_label_set_text(label, "X");
-    //}
-
-    //if (state.level < 1)
-    //{
-    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
-    //    lv_label_set_text(label, "X");
-    //} else if (state.level <= 10) {
-    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_ORANGE), 0);
-    //    lv_label_set_text_fmt(label, "%4u", state.level);
-    //} else if (state.level <= 30) {
-    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_YELLOW), 0);
-    //    lv_label_set_text_fmt(label, "%4u", state.level);
-    //} else {
-    //    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-    //    lv_label_set_text_fmt(label, "%4u", state.level);
-    //}
-    
-    
-    
-    //lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
-    //lv_obj_move_foreground(symbol);
-    //lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
-    //lv_obj_move_foreground(label);
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(bar);
 
@@ -311,13 +281,13 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_style_init(&style_bg);
         lv_style_set_border_color(&style_bg, lv_color_white());
         lv_style_set_border_width(&style_bg, 1);
-        lv_style_set_radius(&style_bg, 8);
+        lv_style_set_radius(&style_bg, 7);
 
         // Initial style of moving indicator of the bar.
         lv_style_init(&style_indic);
         lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
         lv_style_set_bg_color(&style_indic, lv_color_white());
-        lv_style_set_radius(&style_indic, 6);
+        lv_style_set_radius(&style_indic, 5);
 
         // Remove all pre-defined styling
         lv_obj_remove_style_all(bar);
@@ -329,7 +299,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_set_size(bar, BATT_BAR_LENGTH, BATT_BAR_HEIGHT);
         lv_bar_set_range(bar, BATT_BAR_MIN, BATT_BAR_MAX);
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), 0);
+        lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -4);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
 
 
