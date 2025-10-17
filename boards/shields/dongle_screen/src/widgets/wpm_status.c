@@ -95,7 +95,6 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
 
     lv_obj_set_size(bar, WPM_BAR_LENGTH, WPM_BAR_HEIGHT);
     lv_bar_set_range(bar, WPM_BAR_MIN, WPM_BAR_MAX);
-    lv_bar_set_anim_time(bar, 500);
 
     // Set the label.
     lv_label_set_text(wpm_label, "Words per Minute");
