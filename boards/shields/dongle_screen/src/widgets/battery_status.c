@@ -162,9 +162,10 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
 
     // Calculate x-position based on bar value
-    lv_obj_center(value_label);
-    lv_obj_set_style_text_color(value_label, lv_palette_main(LV_PALETTE_GREEN), 0);
-    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_obj_get_width(value_label)) - 5);
+    //lv_obj_center(value_label);
+    lv_obj_set_style_text_color(value_label, lv_color_white(), 0);
+    lv_obj_set_style_text_font(value_label, &lv_font_montserrat_12, 0);
+    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - 5);
 
 
     // Style the bar indicator and border to the various states.
