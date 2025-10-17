@@ -49,7 +49,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
                            state.active_profile_bonded ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
     lv_color_t inactive_color = lv_palette_main(LV_PALETTE_GREY);
 
-    char ble_text[4];
+    char ble_text[12];
     snprintf(ble_text, sizeof(ble_text), "%s BLE %d", LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
     lv_label_set_text(widget->ble_label, ble_text);
     
@@ -93,7 +93,7 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
     lv_label_set_text(widget->usb_label, LV_SYMBOL_USB " USB");
 
     widget->ble_label = lv_label_create(widget->obj);
-    lv_obj_align(widget->ble_label, LV_ALIGN_TOP_RIGHT, 0, 15);
+    lv_obj_align(widget->ble_label, LV_ALIGN_TOP_RIGHT, 0, 20);
     lv_obj_set_style_text_align(widget->ble_label, LV_TEXT_ALIGN_RIGHT, 0);
 
     sys_slist_append(&widgets, &widget->node);
