@@ -6,26 +6,21 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/bluetooth/services/bas.h>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
-
 #include <zmk/display.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/hid_indicators_changed.h>
-
 #include <fonts.h>
-
 #include "hid_indicators.h"
+#include <lvgl.h>
 
+// Offsets for each of the lock states.
 #define LED_NLCK 0x01
 #define LED_CLCK 0x02
 #define LED_SLCK 0x04
 
+// This defines the LOCK and UNLOCK icons found in the icons_lvgl.c font.
 #define LOCK "\xEF\x80\xA3"
 #define UNLOCK "\xEF\x8F\x81"
-
-// Add LVGL color includes
-#include <lvgl.h>
 
 struct hid_indicators_state {
     uint8_t hid_indicators;
@@ -33,19 +28,15 @@ struct hid_indicators_state {
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
-// Define colors
-static lv_color_t inactive_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
-static lv_color_t active_color = LV_COLOR_MAKE(0x00, 0x00, 0xFF); // blue
-
 static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct hid_indicators_state state) {
     bool caps = state.hid_indicators & LED_CLCK;
     bool num = state.hid_indicators & LED_NLCK;
     bool scroll = state.hid_indicators & LED_SLCK;
 
     // Set the color based on active or inavtive.
-    lv_color_t caps_color = caps ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
-    lv_color_t num_color = num ? lv_palette_main(LV_PALETTE_INDIGO) : inactive_color;
-    lv_color_t scroll_color = scroll ? lv_palette_main(LV_PALETTE_PURPLE) : inactive_color;
+    lv_color_t caps_color = caps ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_darken(LV_PALETTE_GREY,3);
+    lv_color_t num_color = num ? lv_palette_main(LV_PALETTE_INDIGO) : lv_palette_darken(LV_PALETTE_GREY,3);
+    lv_color_t scroll_color = scroll ? lv_palette_main(LV_PALETTE_PURPLE) : lv_palette_darken(LV_PALETTE_GREY,3);
 
     // Set the icon based on locked or unlocked.
     const char* cap_icon_choice = caps ? LOCK : UNLOCK;
@@ -95,7 +86,7 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_hid_indicators, struct hid_indicators_state,
 ZMK_SUBSCRIPTION(widget_hid_indicators, zmk_hid_indicators_changed);
 
 int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_obj_t *parent) {
-    // Create horizontal container
+    // Create the Main Container
     widget->cont = lv_obj_create(parent);
     lv_obj_set_size(widget->cont, 80, 80);
     lv_obj_set_style_border_width(widget->cont, 0, 0);
@@ -103,24 +94,23 @@ int zmk_widget_hid_indicators_init(struct zmk_widget_hid_indicators *widget, lv_
     lv_obj_set_style_bg_opa(widget->cont, LV_OPA_TRANSP, 0);
     lv_obj_set_style_text_font(widget->cont, &lv_font_montserrat_20, 0);
 
-    // Add labels
+    // Setup the CAPS Lock Icon and Label
     widget->caps_label = lv_label_create(widget->cont);
     widget->caps_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->caps_icon, LV_ALIGN_TOP_LEFT, 60, 0);
     lv_obj_align(widget->caps_label, LV_ALIGN_TOP_LEFT, 0, 3);
-    
+
+    // Setup the NUM Lock Icon and Label
     widget->num_label = lv_label_create(widget->cont);
     widget->num_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->num_icon, LV_ALIGN_TOP_LEFT, 60, 25);
     lv_obj_align(widget->num_label, LV_ALIGN_TOP_LEFT, 0, 28);
 
+    // Setup the SCROLL Lock Icon and Label
     widget->scroll_label = lv_label_create(widget->cont);
     widget->scroll_icon = lv_label_create(widget->cont);
     lv_obj_align(widget->scroll_icon, LV_ALIGN_TOP_LEFT, 60, 50);
     lv_obj_align(widget->scroll_label, LV_ALIGN_TOP_LEFT, 0, 53);
-
-    // Optional: add some spacing between labels
-    // lv_obj_set_style_pad_gap(widget->cont, 8, 0);
 
     sys_slist_append(&widgets, &widget->node);
 
