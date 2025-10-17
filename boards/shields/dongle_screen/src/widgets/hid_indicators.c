@@ -43,7 +43,7 @@ static void set_hid_indicators(struct zmk_widget_hid_indicators *widget, struct 
     bool scroll = state.hid_indicators & LED_SLCK;
 
     // Set the color based on active or inavtive.
-    lv_color_t caps_color = caps ? lv_palette_main(LV_PALETTE_GREEN) : inactive_color;
+    lv_color_t caps_color = caps ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
     lv_color_t num_color = num ? lv_palette_main(LV_PALETTE_INDIGO) : inactive_color;
     lv_color_t scroll_color = scroll ? lv_palette_main(LV_PALETTE_PURPLE) : inactive_color;
 
