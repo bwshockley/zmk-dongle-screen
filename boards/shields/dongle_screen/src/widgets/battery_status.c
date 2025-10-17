@@ -90,8 +90,7 @@ static void event_cb(lv_event_t * e)
 
     lv_obj_t * bar = lv_event_get_target(e);
     lv_obj_t * value_label = lv_bar_create(bar);
-
-    lv_bar_set_value(bar, state.level, LV_ANIM_ON);
+    
     lv_label_set_text_fmt(value_label, "HELLO %d", lv_bar_get_value(bar));
 
     // Get the bar's content area coordinates
@@ -100,6 +99,7 @@ static void event_cb(lv_event_t * e)
     lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
 
     // Calculate x-position based on bar value
+    
     lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_bar_get_min_value(bar)) / bar_range * bar_width) - lv_obj_get_width(value_label) - 5;
 
     // Set the label's position
