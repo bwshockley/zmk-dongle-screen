@@ -131,7 +131,6 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     // Update our tracking
     last_battery_levels[state.source] = state.level;
 
-
     // Wake screen on reconnection
     if (reconnecting) {
         #if CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S > 0    
@@ -172,7 +171,6 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(bar);
-
 }
 
 void battery_status_update_cb(struct battery_state state) {
@@ -253,7 +251,6 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
-
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
