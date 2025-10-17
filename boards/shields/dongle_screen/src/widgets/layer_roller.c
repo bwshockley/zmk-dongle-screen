@@ -28,7 +28,9 @@ static void layer_roller_set_sel(lv_obj_t *roller, struct layer_roller_state sta
         lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_SELECTED);
     } else if (state.index == 4) {
         lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
-    }   
+    } else {
+        lv_obj_set_style_text_color(roller, lv_color_hex(0xffffff), LV_PART_SELECTED);
+    }
     lv_roller_set_selected(roller, layer_select_id[state.index], LV_ANIM_ON);
 }
 
