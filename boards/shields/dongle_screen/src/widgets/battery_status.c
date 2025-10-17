@@ -47,11 +47,7 @@ struct battery_state {
 
 struct battery_object {
     lv_obj_t * bar;
-    lv_obj_t * symbol;
-    lv_obj_t * label;
 } battery_objects[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
-    
-static lv_color_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET][102 * 5];
 
 static lv_style_t style_bg;
 static lv_style_t style_indic;
@@ -85,41 +81,6 @@ static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
     }
     
     return reconnecting;
-}
-
-static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
-    
-    if (level < 1)
-    {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
-    } else if (level <= 10) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_ORANGE), LV_OPA_COVER);
-    } else if (level <= 30) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_YELLOW), LV_OPA_COVER);
-    } else {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_GREEN), LV_OPA_COVER);
-    }
-
-    
-    lv_draw_rect_dsc_t rect_fill_dsc;
-    lv_draw_rect_dsc_init(&rect_fill_dsc);
-    rect_fill_dsc.bg_color = lv_color_black();
-
-
-
-    lv_canvas_set_px(canvas, 0, 0, lv_color_black());
-    lv_canvas_set_px(canvas, 0, 4, lv_color_black());
-    lv_canvas_set_px(canvas, 101, 0, lv_color_black());
-    lv_canvas_set_px(canvas, 101, 4, lv_color_black());
-
-    if (level <= 99 && level > 0)
-    {
-        lv_canvas_draw_rect(canvas, level, 1, 100 - level, 3, &rect_fill_dsc);
-        lv_canvas_set_px(canvas, 100, 1, lv_color_black());
-        lv_canvas_set_px(canvas, 100, 2, lv_color_black());
-        lv_canvas_set_px(canvas, 100, 3, lv_color_black());
-    }
-    
 }
 
 static void event_cb(lv_event_t * e)
@@ -185,15 +146,11 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
 
     LOG_DBG("source: %d, level: %d, usb: %d", state.source, state.level, state.usb_present);
-    //lv_obj_t *symbol = battery_objects[state.source].symbol;
-    //lv_obj_t *label = battery_objects[state.source].label;
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
 
     lv_bar_set_value(bar, state.level, LV_ANIM_ON);
-
-    //draw_battery(symbol, state.level, state.usb_present);
 
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
@@ -271,10 +228,6 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
     
     for (int i = 0; i < ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET; i++) {
         lv_obj_t * bar = lv_bar_create(widget->obj);
-        lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
-        lv_obj_t * battery_label = lv_label_create(widget->obj);
-
-        //lv_canvas_set_buffer(image_canvas, battery_image_buffer[i], 102, 5, LV_IMG_CF_TRUE_COLOR);
 
         // Initial style of background of the bar.
         lv_style_init(&style_bg);
@@ -298,22 +251,13 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_set_size(bar, BATT_BAR_LENGTH, BATT_BAR_HEIGHT);
         lv_bar_set_range(bar, BATT_BAR_MIN, BATT_BAR_MAX);
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -4);
+        lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
 
-
-        //lv_obj_align(image_canvas, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -8);
-        //lv_obj_align(battery_label, LV_ALIGN_TOP_MID, -60 +(i * 120), 0);
-
-        // Temporarily Hide the objects before they are ready.
-        lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(battery_label, LV_OBJ_FLAG_HIDDEN);
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
             .bar = bar,
-            .symbol = image_canvas,
-            .label = battery_label,
         };
     }
 
