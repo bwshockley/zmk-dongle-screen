@@ -13,7 +13,7 @@ struct zmk_widget_dongle_battery_status {
     sys_snode_t node;
     lv_obj_t *obj;
     lv_obj_t *value_label;
-    lv_obt_t *bar;
+    lv_obj_t *bar;
 };
 
 int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_status *widget, lv_obj_t *parent);
