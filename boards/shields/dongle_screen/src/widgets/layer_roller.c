@@ -29,7 +29,7 @@ static void layer_roller_set_sel(lv_obj_t *roller, struct layer_roller_state sta
     } else if (state.index == 4) {
         lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
     } else {
-        lv_obj_set_style_text_color(roller, lv_color_hex(0xffffff), LV_PART_SELECTED);
+        lv_obj_set_style_text_color(roller, lv_color_white(), LV_PART_SELECTED);
     }
     lv_roller_set_selected(roller, layer_select_id[state.index], LV_ANIM_ON);
 }
@@ -122,11 +122,11 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     lv_obj_set_style_text_align(widget->obj, LV_ALIGN_LEFT_MID, LV_PART_SELECTED);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_TRANSP, LV_PART_SELECTED);
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_40, LV_PART_SELECTED);   
-    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0xffffff), LV_PART_SELECTED);
+    lv_obj_set_style_text_color(widget->obj, lv_color_white(), LV_PART_SELECTED);
 
     // Set the text size and color of the non-selected layers.
     lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_32, LV_PART_MAIN);
-    lv_obj_set_style_text_color(widget->obj, lv_color_hex(0x050505), LV_PART_MAIN);
+    lv_obj_set_style_text_color(widget->obj, lv_palette_darken(LV_PALETTE_GREY,4), LV_PART_MAIN);
 
     layer_names_buffer[0] = '\0';
     char *ptr = layer_names_buffer;
