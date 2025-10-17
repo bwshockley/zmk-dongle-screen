@@ -150,6 +150,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     lv_obj_t * bar = battery_objects[state.source].bar;
     lv_obj_t * value_label = lv_bar_create(bar);
 
+    lv_bar_set_value(bar, state.level, LV_ANIM_ON);
     lv_label_set_text_fmt(value_label, "%d", lv_bar_get_value(bar));
 
     // Get the bar's content area coordinates
@@ -162,8 +163,6 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Set the label's position
     lv_obj_set_pos(value_label, label_x, lv_obj_get_height(bar) / 2 - lv_obj_get_height(value_label) / 2);
-
-    lv_bar_set_value(bar, state.level, LV_ANIM_ON);
 
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
