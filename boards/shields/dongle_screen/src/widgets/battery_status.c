@@ -131,13 +131,13 @@ static void event_cb(lv_event_t * e)
 
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
-    label_dsc.font = LV_FONT_MONTSERRAT_12;
+    label_dsc.font = LV_FONT_DEFAULT;
 
     char buf[8];
     lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
 
     lv_point_t txt_size;
-    lv_txt_get_size(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
+    Z(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
                     label_dsc.flag);
 
     lv_area_t txt_area;
