@@ -121,7 +121,7 @@ static void event_cb(lv_event_t * e)
     lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
 }
 
-static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
+static void set_battery_symbol(zmk_widget_dongle_battery_status *widget, struct battery_state state) {
     if (state.source >= ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET) {
         return;
     }
@@ -150,50 +150,48 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
-    lv_label_set_text_fmt(bar->value_label, "%d", lv_bar_get_value(bar));
 
-    lv_bar_set_value(bar, state.level, LV_ANIM_OFF);
-    
-    lv_label_set_text_fmt(value_label, "%d", lv_bar_get_value(bar));
+    lv_bar_set_value(widget->bar, state.level, LV_ANIM_OFF);
+    lv_label_set_text_fmt(widget->value_label, "%d", lv_bar_get_value(widget->bar));
 
     // Get the bar's content area coordinates
-    lv_coord_t bar_width = lv_obj_get_width(bar);
-    lv_coord_t bar_value = lv_bar_get_value(bar);
-    lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
+    lv_coord_t bar_width = lv_obj_get_width(widget->bar);
+    lv_coord_t bar_value = lv_bar_get_value(widget->bar);
+    lv_coord_t bar_range = lv_bar_get_max_value(widget->bar) - lv_bar_get_min_value(widget->bar);
 
     // Calculate x-position based on bar value
     //lv_obj_center(value_label);
-    lv_obj_set_style_text_color(value_label, lv_color_white(), 0);
-    lv_obj_set_style_text_font(value_label, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_color(widget->value_label, lv_color_white(), 0);
+    lv_obj_set_style_text_font(widget->value_label, &lv_font_montserrat_12, 0);
     lv_coord_t label_x = (lv_coord_t)((float)(bar_value - 5));
 
 
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
-        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR); 
     } else if (state.level <= 20) {
-        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_ORANGE), 0);
-        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_ORANGE), 0);
+        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_INDICATOR); 
     } else if (state.level <= 30) {
-        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_YELLOW), 0);
-        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_YELLOW), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_YELLOW), 0);
+        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_YELLOW), LV_PART_INDICATOR); 
     } else if (state.level <= 90) {
-        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_GREEN), 0);
-        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_GREEN), 0);
+        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR); 
     } else {
-        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_INDIGO), 0);
-        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_INDIGO), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_INDIGO), 0);
+        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_INDIGO), LV_PART_INDICATOR); 
     }
 
-    lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(bar);
+    lv_obj_clear_flag(widget->bar, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(widget->bar);
 
 }
 
 void battery_status_update_cb(struct battery_state state) {
     struct zmk_widget_dongle_battery_status *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_symbol(widget->obj, state); }
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_symbol(widget, state); }
 }
 
 static struct battery_state peripheral_battery_status_get_state(const zmk_event_t *eh) {
