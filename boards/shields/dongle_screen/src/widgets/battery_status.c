@@ -148,7 +148,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
-    lv_obj_t * value_label = bar->label;
+    lv_obj_t * value_label = lv_bar_create(widget->bar);
 
     lv_label_set_text_fmt(value_label, "%d", lv_bar_get_value(bar));
 
@@ -265,8 +265,6 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
-
-        lv_obj_t * label = lv_bar_create(widget->bar);
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
