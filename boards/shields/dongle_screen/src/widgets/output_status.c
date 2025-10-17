@@ -25,6 +25,11 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 lv_point_t selection_line_points[] = {{0, 0}, {13, 0}}; // will be replaced with lv_point_precise_t
 
+struct output_object {
+    lv_obj_t * usb_label;
+    lv_obj_t * ble_label;
+} output_objects;
+
 struct output_status_state
 {
     struct zmk_endpoint_instance selected_endpoint;
@@ -46,6 +51,9 @@ static struct output_status_state get_state(const zmk_event_t *_eh)
 
 static void set_status_symbol(struct zmk_widget_output_status *widget, struct output_status_state state)
 {
+    lv_obj_t * usb_label = output_object.usb_label;
+    lv_obj_t * ble_label = output_object.ble_label;
+    
     lv_color_t usb_color = state.usb_is_hid_ready ? lv_palette_main(LV_PALETTE_ORANGE) : lv_palette_main(LV_PALETTE_RED);
     lv_color_t ble_color = state.active_profile_connected ? lv_palette_main(LV_PALETTE_BLUE) :
                            state.active_profile_bonded ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
@@ -97,6 +105,12 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
     widget->ble_label = lv_label_create(widget->obj);
     lv_obj_align(widget->ble_label, LV_ALIGN_TOP_RIGHT, 0, 15);
     lv_obj_set_style_text_align(widget->ble_label, LV_TEXT_ALIGN_RIGHT, 0);
+
+    // Pakage the objects into the collector.
+    output_objects = (struct output_object){
+        .usb_label = usb_label,
+        .ble_label = ble_label,
+    };
 
     sys_slist_append(&widgets, &widget->node);
 
