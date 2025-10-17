@@ -100,7 +100,7 @@ static void event_cb(lv_event_t * e)
 
     // Calculate x-position based on bar value
     
-    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_bar_get_min_value(bar)) / bar_range * bar_width) - lv_obj_get_width(value_label) - 5;
+    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_obj_get_width(value_label)) - 5);
 
     // Set the label's position
     lv_obj_set_pos(value_label, label_x, lv_obj_get_height(bar) / 2 - lv_obj_get_height(value_label) / 2);
@@ -163,7 +163,8 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
-   
+    lv_bar_set_value(bar, state.level, LV_ANIM_OFF);
+    
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
         lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_RED), 0);
