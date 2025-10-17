@@ -137,8 +137,7 @@ static void event_cb(lv_event_t * e)
     lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
 
     lv_point_t txt_size;
-    Z(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
-                    label_dsc.flag);
+    lv_txt_get_size(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX, label_dsc.flag);
 
     lv_area_t txt_area;
     /*If the indicator is long enough put the text inside on the right*/
