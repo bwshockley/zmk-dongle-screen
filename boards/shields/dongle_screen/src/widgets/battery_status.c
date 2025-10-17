@@ -121,6 +121,44 @@ static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
     
 }
 
+static void event_cb(lv_event_t * e)
+{
+    lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(battery_objects[state.source].bar);
+    if(dsc->part != LV_PART_INDICATOR) return;
+
+    lv_obj_t * obj = lv_event_get_target(battery_objects[state.source].bar);
+
+    lv_draw_label_dsc_t label_dsc;
+    lv_draw_label_dsc_init(&label_dsc);
+    label_dsc.font = LV_FONT_DEFAULT;
+
+    char buf[8];
+    lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
+
+    lv_point_t txt_size;
+    lv_txt_get_size(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
+                    label_dsc.flag);
+
+    lv_area_t txt_area;
+    /*If the indicator is long enough put the text inside on the right*/
+    if(lv_area_get_width(dsc->draw_area) > txt_size.x + 20) {
+        txt_area.x2 = dsc->draw_area->x2 - 5;
+        txt_area.x1 = txt_area.x2 - txt_size.x + 1;
+        label_dsc.color = lv_color_white();
+    }
+    /*If the indicator is still short put the text out of it on the right*/
+    else {
+        txt_area.x1 = dsc->draw_area->x2 + 5;
+        txt_area.x2 = txt_area.x1 + txt_size.x - 1;
+        label_dsc.color = lv_color_black();
+    }
+
+    txt_area.y1 = dsc->draw_area->y1 + (lv_area_get_height(dsc->draw_area) - txt_size.y) / 2;
+    txt_area.y2 = txt_area.y1 + txt_size.y - 1;
+
+    lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
+}
+
 static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     if (state.source >= ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET) {
         return;
@@ -152,37 +190,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
-    lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(bar);
 
-    lv_draw_label_dsc_t label_dsc;
-    lv_draw_label_dsc_init(&label_dsc);
-    label_dsc.font = LV_FONT_DEFAULT;
-
-    char buf[8];
-    lv_snprintf(buf, sizeof(buf), "%d", state.level);
-    
-    lv_point_t txt_size;
-    lv_txt_get_size(&txt_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
-                    label_dsc.flag);
-
-    lv_area_t txt_area;
-    /*If the indicator is long enough put the text inside on the right*/
-    if(lv_area_get_width(dsc->draw_area) > txt_size.x + 20) {
-        txt_area.x2 = dsc->draw_area->x2 - 5;
-        txt_area.x1 = txt_area.x2 - txt_size.x + 1;
-        label_dsc.color = lv_color_white();
-    }
-    /*If the indicator is still short put the text out of it on the right*/
-    else {
-        txt_area.x1 = dsc->draw_area->x2 + 5;
-        txt_area.x2 = txt_area.x1 + txt_size.x - 1;
-        label_dsc.color = lv_color_black();
-    }
-
-    txt_area.y1 = dsc->draw_area->y1 + (lv_area_get_height(dsc->draw_area) - txt_size.y) / 2;
-    txt_area.y2 = txt_area.y1 + txt_size.y - 1;
-
-    lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
     lv_bar_set_value(bar, state.level, LV_ANIM_ON);
 
     //draw_battery(symbol, state.level, state.usb_present);
@@ -321,6 +329,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_bar_set_range(bar, BATT_BAR_MIN, BATT_BAR_MAX);
         lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), 0);
+        lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
 
 
         lv_obj_align(image_canvas, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -8);
