@@ -92,12 +92,12 @@ static void event_cb(lv_event_t * e)
 
     lv_obj_t * value_label = lv_label_create(obj);
     
-    lv_label_set_text_fmt(value_label, "HELLO %d", lv_bar_get_value(bar));
+    lv_label_set_text_fmt(value_label, "HELLO %d", lv_bar_get_value(obj));
 
     // Get the bar's content area coordinates
-    lv_coord_t bar_width = lv_obj_get_width(bar);
-    lv_coord_t bar_value = lv_bar_get_value(bar);
-    lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
+    lv_coord_t bar_width = lv_obj_get_width(obj);
+    lv_coord_t bar_value = lv_bar_get_value(obj);
+    lv_coord_t bar_range = lv_bar_get_max_value(obj) - lv_bar_get_min_value(obj);
 
     // Calculate x-position based on bar value
     lv_obj_center(value_label);
