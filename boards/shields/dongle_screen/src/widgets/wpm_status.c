@@ -16,14 +16,11 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "wpm_status.h"
 #include <fonts.h>
 
-#define WPM_BAR_LENGTH 120
+#define WPM_BAR_LENGTH 130
 #define WPM_BAR_HEIGHT 20
 
 #define WPM_BAR_MIN 0
 #define WPM_BAR_MAX 160
-
-// Stylize the bar here.
-static lv_color_t dark_grey_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 struct wpm_status_state
@@ -84,7 +81,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
 
     // Set the bar style.
     lv_style_init(&style_bg);
-    lv_style_set_border_color(&style_bg, dark_grey_color);
+    lv_style_set_border_color(&style_bg, lv_palette_darken(LV_PALETTE_GREY,3));
     lv_style_set_border_width(&style_bg, 1);
     lv_style_set_radius(&style_bg, 10);
 
@@ -105,7 +102,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     // Set the label.
     lv_label_set_text(wpm_label, "Words per Minute");
     lv_obj_set_style_text_font(wpm_label, &lv_font_montserrat_12, 0);
-    lv_obj_set_style_text_color(wpm_label, dark_grey_color, 0);
+    lv_obj_set_style_text_color(wpm_label, lv_palette_darken(LV_PALETTE_GREY,3), 0);
     
     // Align all the objects within the newly created widget.
     lv_obj_align(bar, LV_ALIGN_TOP_LEFT, 0, 0);
