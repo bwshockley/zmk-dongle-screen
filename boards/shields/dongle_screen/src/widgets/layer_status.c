@@ -74,7 +74,7 @@ int zmk_widget_layer_status_init(struct zmk_widget_layer_status *widget, lv_obj_
 {
     widget->obj = lv_label_create(parent);
 
-    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_48, 0);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_40, 0);
 
     sys_slist_append(&widgets, &widget->node);
 
