@@ -44,15 +44,18 @@ static struct output_status_state get_state(const zmk_event_t *_eh)
 
 static void set_status_symbol(struct zmk_widget_output_status *widget, struct output_status_state state)
 {
+    // Set the label text color based on the various endpoint states.
     lv_color_t usb_color = state.usb_is_hid_ready ? lv_palette_main(LV_PALETTE_ORANGE) : lv_palette_main(LV_PALETTE_RED);
     lv_color_t ble_color = state.active_profile_connected ? lv_palette_main(LV_PALETTE_BLUE) :
-                           state.active_profile_bonded ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
-    lv_color_t inactive_color = lv_palette_main(LV_PALETTE_GREY);
+                           state.active_profile_bonded ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_darken(LV_PALETTE_GREY,3);
+    lv_color_t inactive_color = lv_palette_darken(LV_PALETTE_GREY,3);
 
+    // Create the BLE Label text based on the active profile index.
     char ble_text[12];
     snprintf(ble_text, sizeof(ble_text), "%s BLE %d", LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
     lv_label_set_text(widget->ble_label, ble_text);
-    
+
+    // Highlight the endpoint being used based on the color choices above, and set the inavtice endpoint a dark grey.
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
@@ -87,11 +90,13 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 50);
 
+    // Setup the USB Label, since the label text is static assign it here.
     widget->usb_label = lv_label_create(widget->obj);
     lv_obj_align(widget->usb_label, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_obj_set_style_text_align(widget->usb_label, LV_TEXT_ALIGN_RIGHT, 0);
     lv_label_set_text(widget->usb_label, LV_SYMBOL_USB " USB");
 
+    // Setup the BLE Label.  BLE text is not static, so we do not assign it here.
     widget->ble_label = lv_label_create(widget->obj);
     lv_obj_align(widget->ble_label, LV_ALIGN_TOP_RIGHT, 0, 20);
     lv_obj_set_style_text_align(widget->ble_label, LV_TEXT_ALIGN_RIGHT, 0);
