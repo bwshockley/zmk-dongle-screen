@@ -99,11 +99,8 @@ static void event_cb(lv_event_t * e)
     lv_coord_t bar_range = lv_bar_get_max_value(bar) - lv_bar_get_min_value(bar);
 
     // Calculate x-position based on bar value
-    
+    lv_obj_center(value_label);
     lv_coord_t label_x = (lv_coord_t)((float)(bar_value - lv_obj_get_width(value_label)) - 5);
-
-    // Set the label's position
-    lv_obj_set_pos(value_label, label_x, lv_obj_get_height(bar) / 2 - lv_obj_get_height(value_label) / 2);
 
     //lv_draw_label_dsc_t label_dsc;
     //lv_draw_label_dsc_init(&label_dsc);
