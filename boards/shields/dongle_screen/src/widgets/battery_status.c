@@ -151,10 +151,8 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     lv_obj_t * bar = battery_objects[state.source].bar;
 
     lv_bar_set_value(bar, state.level, LV_ANIM_OFF);
-
-    lv_obj_t * value_label = lv_label_create(bar);
     
-    lv_label_set_text_fmt(value_label, "%d", lv_bar_get_value(bar));
+    lv_label_set_text_fmt(bar->value_label, "%d", lv_bar_get_value(bar));
 
     // Get the bar's content area coordinates
     lv_coord_t bar_width = lv_obj_get_width(bar);
@@ -244,6 +242,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
     
     for (int i = 0; i < ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET; i++) {
         lv_obj_t * bar = lv_bar_create(widget->obj);
+        lv_obj_t * value_label = lv_label_create(bar);
 
         // Initial style of background of the bar.
         lv_style_init(&style_bg);
@@ -270,7 +269,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
 
-
+        
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
             .bar = bar,
