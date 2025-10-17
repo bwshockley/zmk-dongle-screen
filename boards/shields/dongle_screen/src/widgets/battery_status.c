@@ -121,7 +121,7 @@ static void event_cb(lv_event_t * e)
     lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
 }
 
-static void set_battery_symbol(zmk_widget_dongle_battery_status *widget, struct battery_state state) {
+static void set_battery_symbol(struct zmk_widget_dongle_battery_status *widget, struct battery_state state) {
     if (state.source >= ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET) {
         return;
     }
