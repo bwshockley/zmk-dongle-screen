@@ -165,7 +165,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     //lv_obj_center(value_label);
     lv_obj_set_style_text_color(value_label, lv_color_white(), 0);
     lv_obj_set_style_text_font(value_label, &lv_font_montserrat_12, 0);
-    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - 5);
+    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - 5));
 
 
     // Style the bar indicator and border to the various states.
