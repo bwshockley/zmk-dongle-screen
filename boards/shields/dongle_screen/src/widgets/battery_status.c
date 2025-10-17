@@ -341,7 +341,7 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
-            .bar = battery_bar,
+            .bar = bar,
             .symbol = image_canvas,
             .label = battery_label,
         };
