@@ -28,7 +28,7 @@ lv_point_t selection_line_points[] = {{0, 0}, {13, 0}}; // will be replaced with
 struct output_object {
     lv_obj_t * usb_label;
     lv_obj_t * ble_label;
-} output_objects;
+} output_object;
 
 struct output_status_state
 {
@@ -107,7 +107,7 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
     lv_obj_set_style_text_align(widget->ble_label, LV_TEXT_ALIGN_RIGHT, 0);
 
     // Pakage the objects into the collector.
-    output_objects = (struct output_object){
+    output_object = (struct output_object){
         .usb_label = usb_label,
         .ble_label = ble_label,
     };
