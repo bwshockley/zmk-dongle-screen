@@ -47,7 +47,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     lv_color_t usb_color = state.usb_is_hid_ready ? lv_palette_main(LV_PALETTE_ORANGE) : lv_palette_main(LV_PALETTE_RED);
     lv_color_t ble_color = state.active_profile_connected ? lv_palette_main(LV_PALETTE_BLUE) :
                            state.active_profile_bonded ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
-    lv_color_t inavtive_color = lv_palette_main(LV_PALETTE_GREY);
+    lv_color_t inactive_color = lv_palette_main(LV_PALETTE_GREY);
 
     char ble_text[4];
     snprintf(ble_text, sizeof(ble_text), "%s BLE %d", LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
@@ -60,7 +60,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
         lv_obj_set_style_text_color(widget->ble_label, inactive_color, 0);
         break;
     case ZMK_TRANSPORT_BLE:
-        lv_obj_set_style_text_color(widget->usb_label, inactive_color, 0);
+        //lv_obj_set_style_text_color(widget->usb_label, inactive_color, 0);
         lv_obj_set_style_text_color(widget->ble_label, ble_color, 0);
         break;
     }
