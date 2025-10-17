@@ -50,9 +50,6 @@ static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_stat
     if (state.wpm > WPM_BAR_MAX) { state.wpm = WPM_BAR_MAX; }
 
     lv_bar_set_value(bar, state.wpm, LV_ANIM_ON);
-
-    lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(bar);
 }
 
 static void wpm_status_update_cb(struct wpm_status_state state)
@@ -98,6 +95,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
 
     lv_obj_set_size(bar, WPM_BAR_LENGTH, WPM_BAR_HEIGHT);
     lv_bar_set_range(bar, WPM_BAR_MIN, WPM_BAR_MAX);
+    lv_bar_set_anim_time(bar, 500);
 
     // Set the label.
     lv_label_set_text(wpm_label, "Words per Minute");
@@ -106,10 +104,7 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     
     // Align all the objects within the newly created widget.
     lv_obj_align(bar, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_align(wpm_label, LV_ALIGN_BOTTOM_LEFT, 0, 0);
-
-    // Temporarily hide them until we we ready to work on them.
-    lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);    
+    lv_obj_align(wpm_label, LV_ALIGN_BOTTOM_LEFT, 0, 0); 
 
     // Create the wmp_object assigning the objects created in this function to the wpm_object.
     wpm_object = (struct wpm_object){
