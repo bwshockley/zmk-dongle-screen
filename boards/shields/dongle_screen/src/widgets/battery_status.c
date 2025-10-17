@@ -33,10 +33,9 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define BATT_BAR_MAX 100
 #define BATT_BAR_MIN 0
 
-// Create Colors
+// Stylize the bar here.
 static lv_color_t dark_grey_color = LV_COLOR_MAKE(0x40, 0x40, 0x40); // dark grey
-static lv_color_t green_color = LV_COLOR_MAKE(0x00, 0xFF, 0x00); // Pure Green
-static lv_color_t blue_color = LV_COLOR_MAKE(0x00, 0x00, 0xFF); // Pure Blue
+static lv_color_t pure_blue_color = LV_COLOR_MAKE(0x00, 0x00, 0xFF); // dark grey
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -48,6 +47,8 @@ struct battery_state {
 
 struct battery_object {
     lv_obj_t * bar;
+    lv_obj_t * symbol;
+    lv_obj_t * label;
 } battery_objects[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
     
 static lv_color_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET][102 * 5];
@@ -86,6 +87,41 @@ static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
     return reconnecting;
 }
 
+static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
+    
+    if (level < 1)
+    {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
+    } else if (level <= 10) {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_ORANGE), LV_OPA_COVER);
+    } else if (level <= 30) {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_YELLOW), LV_OPA_COVER);
+    } else {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_GREEN), LV_OPA_COVER);
+    }
+
+    
+    lv_draw_rect_dsc_t rect_fill_dsc;
+    lv_draw_rect_dsc_init(&rect_fill_dsc);
+    rect_fill_dsc.bg_color = lv_color_black();
+
+
+
+    lv_canvas_set_px(canvas, 0, 0, lv_color_black());
+    lv_canvas_set_px(canvas, 0, 4, lv_color_black());
+    lv_canvas_set_px(canvas, 101, 0, lv_color_black());
+    lv_canvas_set_px(canvas, 101, 4, lv_color_black());
+
+    if (level <= 99 && level > 0)
+    {
+        lv_canvas_draw_rect(canvas, level, 1, 100 - level, 3, &rect_fill_dsc);
+        lv_canvas_set_px(canvas, 100, 1, lv_color_black());
+        lv_canvas_set_px(canvas, 100, 2, lv_color_black());
+        lv_canvas_set_px(canvas, 100, 3, lv_color_black());
+    }
+    
+}
+
 static void event_cb(lv_event_t * e)
 {
     lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
@@ -95,7 +131,7 @@ static void event_cb(lv_event_t * e)
 
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
-    label_dsc.font = LV_FONT_MONTSERRAT_16;
+    label_dsc.font = LV_FONT_DEFAULT;
 
     char buf[8];
     lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
@@ -150,11 +186,15 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
 
     LOG_DBG("source: %d, level: %d, usb: %d", state.source, state.level, state.usb_present);
+    //lv_obj_t *symbol = battery_objects[state.source].symbol;
+    //lv_obj_t *label = battery_objects[state.source].label;
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
 
     lv_bar_set_value(bar, state.level, LV_ANIM_ON);
+
+    //draw_battery(symbol, state.level, state.usb_present);
 
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
@@ -170,12 +210,43 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
         lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_GREEN), 0);
         lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR); 
     } else {
-        lv_obj_set_style_border_color(bar, blue_color, 0);
-        lv_obj_set_style_bg_color(bar, blue_color, LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, pure_blue_color, 0);
+        lv_obj_set_style_bg_color(bar, pure_blue_color, LV_PART_INDICATOR); 
     }
 
+    // Styling the label.
+    //if (state.level > 0) {
+    //    lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    //    lv_label_set_text_fmt(label, "%4u", state.level);
+    //} else {
+    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
+    //    lv_label_set_text(label, "X");
+    //}
+
+    //if (state.level < 1)
+    //{
+    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
+    //    lv_label_set_text(label, "X");
+    //} else if (state.level <= 10) {
+    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_ORANGE), 0);
+    //    lv_label_set_text_fmt(label, "%4u", state.level);
+    //} else if (state.level <= 30) {
+    //    lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_YELLOW), 0);
+    //    lv_label_set_text_fmt(label, "%4u", state.level);
+    //} else {
+    //    lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    //    lv_label_set_text_fmt(label, "%4u", state.level);
+    //}
+    
+    
+    
+    //lv_obj_clear_flag(symbol, LV_OBJ_FLAG_HIDDEN);
+    //lv_obj_move_foreground(symbol);
+    //lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
+    //lv_obj_move_foreground(label);
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(bar);
+
 }
 
 void battery_status_update_cb(struct battery_state state) {
@@ -231,6 +302,10 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
     
     for (int i = 0; i < ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET; i++) {
         lv_obj_t * bar = lv_bar_create(widget->obj);
+        lv_obj_t * image_canvas = lv_canvas_create(widget->obj);
+        lv_obj_t * battery_label = lv_label_create(widget->obj);
+
+        //lv_canvas_set_buffer(image_canvas, battery_image_buffer[i], 102, 5, LV_IMG_CF_TRUE_COLOR);
 
         // Initial style of background of the bar.
         lv_style_init(&style_bg);
@@ -257,9 +332,19 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), 0);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
 
+
+        //lv_obj_align(image_canvas, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -8);
+        //lv_obj_align(battery_label, LV_ALIGN_TOP_MID, -60 +(i * 120), 0);
+
+        // Temporarily Hide the objects before they are ready.
+        //lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
+        //lv_obj_add_flag(battery_label, LV_OBJ_FLAG_HIDDEN);
+
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
             .bar = bar,
+            .symbol = image_canvas,
+            .label = battery_label,
         };
     }
 
