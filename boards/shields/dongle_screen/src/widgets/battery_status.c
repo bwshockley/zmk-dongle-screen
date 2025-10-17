@@ -88,7 +88,7 @@ static void event_cb(lv_event_t * e)
     //lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
     //if(dsc->part != LV_PART_INDICATOR) return;
 
-    lv_obj_t * obj = lv_event_get_target(e);
+    lv_obj_t * bar = lv_event_get_target(e);
     lv_obj_t * value_label = lv_bar_create(bar);
 
     lv_bar_set_value(bar, state.level, LV_ANIM_ON);
