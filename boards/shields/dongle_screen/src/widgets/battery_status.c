@@ -337,8 +337,8 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         //lv_obj_align(battery_label, LV_ALIGN_TOP_MID, -60 +(i * 120), 0);
 
         // Temporarily Hide the objects before they are ready.
-        //lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
-        //lv_obj_add_flag(battery_label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(image_canvas, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(battery_label, LV_OBJ_FLAG_HIDDEN);
 
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
