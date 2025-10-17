@@ -46,50 +46,26 @@ static struct output_status_state get_state(const zmk_event_t *_eh)
 
 static void set_status_symbol(struct zmk_widget_output_status *widget, struct output_status_state state)
 {
-    const char *ble_color = "ffffff";
-    const char *usb_color = "ffffff";
-    const char *inactive_color = "222222";
-    char transport_text[50] = {};
-    if (state.usb_is_hid_ready == 0)
-    {
-        usb_color = "ff0000";
-    }
-    else
-    {
-        usb_color = "ff5f1f";
-    }
+    lv_color_t usb_color = state.usb_is_hid_ready ? lv_palette_main(LV_PALETTE_ORANGE) : lv_palette_main(LV_PALETTE_RED);
+    lv_color_t ble_color = state.active_profile_connected ? lv_palette_main(LV_PALETTE_BLUE) :
+                           state.active_profile_bonded ? lv_palette_main(LV_PALETTE_GREEN) : lv_palette_main(LV_PALETTE_GREY);
+    lv_color_t usb_color = lv_palette_main(LV_PALETTE_GREY);
 
-    if (state.active_profile_connected == 1)
-    {
-        ble_color = "00ff00";
-    }
-    else if (state.active_profile_bonded == 1)
-    {
-        ble_color = "0000ff";
-    }
-    else
-    {
-        ble_color = "ffffff";
-    }
-
-    
-    char ble_text[12];
-    snprintf(ble_text, sizeof(ble_text), "%d", state.active_profile_index + 1);
+    char ble_text[4];
+    snprintf(ble_text, sizeof(ble_text), "%s BLE %d", LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
+    lv_label_set_text(widget->ble_label, ble_text);
     
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        snprintf(transport_text, sizeof(transport_text), "#%s %s USB#\n#%s %s BLE %d#", usb_color, LV_SYMBOL_USB, inactive_color, LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
+        lv_obj_set_style_text_color(widget->usb_label, usb_color, 0);
+        lv_obj_set_style_text_color(widget->ble_label, inactive_color, 0);
         break;
     case ZMK_TRANSPORT_BLE:
-        snprintf(transport_text, sizeof(transport_text), "#%s %s USB#\n#%s %s BLE %d#", inactive_color, LV_SYMBOL_USB, ble_color, LV_SYMBOL_BLUETOOTH, state.active_profile_index + 1);
+        lv_obj_set_style_text_color(widget->usb_label, inactive_color, 0);
+        lv_obj_set_style_text_color(widget->ble_label, ble_color, 0);
         break;
     }
-
-    lv_label_set_recolor(widget->transport_label, true);
-    lv_obj_set_style_text_align(widget->transport_label, LV_TEXT_ALIGN_RIGHT, 0);
-    lv_label_set_text(widget->transport_label, transport_text);
-    /*lv_label_set_text(widget->ble_label, ble_text);*/
 }
 
 static void output_status_update_cb(struct output_status_state state)
@@ -113,8 +89,14 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 50);
 
-    widget->transport_label = lv_label_create(widget->obj);
-    lv_obj_align(widget->transport_label, LV_ALIGN_TOP_RIGHT, 0, 0);
+    widget->usb_label = lv_label_create(widget->obj);
+    lv_obj_align(widget->usb_label, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_set_style_text_align(widget->usb_label, LV_TEXT_ALIGN_RIGHT, 0);
+    lv_label_set_text(widget->usb_label, LV_SYMBOL_USB " USB");
+
+    widget->ble_label = lv_label_create(widget->obj);
+    lv_obj_align(widget->ble_label, LV_ALIGN_TOP_RIGHT, 0, 15);
+    lv_obj_set_style_text_align(widget->ble_label, LV_TEXT_ALIGN_RIGHT, 0);
 
     sys_slist_append(&widgets, &widget->node);
 
