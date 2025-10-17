@@ -39,7 +39,7 @@ int zmk_widget_brightness_status_init(struct zmk_widget_brightness_status *widge
     widget->label = lv_label_create(widget->obj);
     lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(widget->label, "");
-    lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_48, 0);
+    lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_40, 0);
     
     lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
     return 0;
