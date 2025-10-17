@@ -52,6 +52,9 @@ struct battery_object {
     
 static lv_color_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET][102 * 5];
 
+static lv_style_t style_bg;
+static lv_style_t style_indic;
+
 // Peripheral reconnection tracking
 // ZMK sends battery events with level < 1 when peripherals disconnect
 static int8_t last_battery_levels[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
@@ -149,7 +152,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
-    lv_obj_draw_part_dsc_t * dsc = lv_obj_get_draw_part_dsc(bar);
+    lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(bar);
 
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
