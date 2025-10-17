@@ -47,7 +47,6 @@ struct battery_state {
 
 struct battery_object {
     lv_obj_t * bar;
-    lv_obj_t * value_label;
 } battery_objects[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
 
 static lv_style_t style_bg;
@@ -121,7 +120,7 @@ static void event_cb(lv_event_t * e)
     lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area, buf, NULL);
 }
 
-static void set_battery_symbol(struct zmk_widget_dongle_battery_status *widget, struct battery_state state) {
+static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     if (state.source >= ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET) {
         return;
     }
@@ -151,47 +150,34 @@ static void set_battery_symbol(struct zmk_widget_dongle_battery_status *widget, 
     // Retreive the bar objet from the passed list of objects.
     lv_obj_t * bar = battery_objects[state.source].bar;
 
-    lv_bar_set_value(widget->bar, state.level, LV_ANIM_OFF);
-    lv_label_set_text_fmt(widget->value_label, "%d", lv_bar_get_value(widget->bar));
-
-    // Get the bar's content area coordinates
-    lv_coord_t bar_width = lv_obj_get_width(widget->bar);
-    lv_coord_t bar_value = lv_bar_get_value(widget->bar);
-    lv_coord_t bar_range = lv_bar_get_max_value(widget->bar) - lv_bar_get_min_value(widget->bar);
-
-    // Calculate x-position based on bar value
-    //lv_obj_center(value_label);
-    lv_obj_set_style_text_color(widget->value_label, lv_color_white(), 0);
-    lv_obj_set_style_text_font(widget->value_label, &lv_font_montserrat_12, 0);
-    lv_coord_t label_x = (lv_coord_t)((float)(bar_value - 5));
-
+    lv_bar_set_value(bar, state.level, LV_ANIM_ON);
 
     // Style the bar indicator and border to the various states.
     if (state.level <= 10) {
-        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR); 
     } else if (state.level <= 20) {
-        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_ORANGE), 0);
-        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_ORANGE), 0);
+        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_INDICATOR); 
     } else if (state.level <= 30) {
-        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_YELLOW), 0);
-        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_YELLOW), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_YELLOW), 0);
+        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_YELLOW), LV_PART_INDICATOR); 
     } else if (state.level <= 90) {
-        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_GREEN), 0);
-        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_GREEN), 0);
+        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR); 
     } else {
-        lv_obj_set_style_border_color(widget->bar, lv_palette_main(LV_PALETTE_INDIGO), 0);
-        lv_obj_set_style_bg_color(widget->bar, lv_palette_main(LV_PALETTE_INDIGO), LV_PART_INDICATOR); 
+        lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_INDIGO), 0);
+        lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_INDIGO), LV_PART_INDICATOR); 
     }
 
-    lv_obj_clear_flag(widget->bar, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(widget->bar);
+    lv_obj_clear_flag(bar, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(bar);
 
 }
 
 void battery_status_update_cb(struct battery_state state) {
     struct zmk_widget_dongle_battery_status *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_symbol(widget, state); }
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_symbol(widget->obj, state); }
 }
 
 static struct battery_state peripheral_battery_status_get_state(const zmk_event_t *eh) {
@@ -242,7 +228,6 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
     
     for (int i = 0; i < ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET; i++) {
         lv_obj_t * bar = lv_bar_create(widget->obj);
-        lv_obj_t * value_label = lv_label_create(bar);
 
         // Initial style of background of the bar.
         lv_style_init(&style_bg);
@@ -269,11 +254,10 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
         lv_obj_align(bar, LV_ALIGN_BOTTOM_MID, -60 +(i * 120), -10);
         lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
 
-        
+
         // Finally, pakage the objects into the collector.
         battery_objects[i] = (struct battery_object){
             .bar = bar,
-            .value_label = value_label,
         };
     }
 
