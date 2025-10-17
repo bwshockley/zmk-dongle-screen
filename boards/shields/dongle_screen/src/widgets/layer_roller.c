@@ -24,9 +24,9 @@ struct layer_roller_state {
 };
 
 static void layer_roller_set_sel(lv_obj_t *roller, struct layer_roller_state state) {
-    if (sate.index == 1) {
+    if (state.index == 1) {
         lv_obj_set_style_text_color(roller, LV_PALETTE_ORANGE, LV_PART_SELECTED);
-    } else if (sate.index == 4) {
+    } else if (state.index == 4) {
         lv_obj_set_style_text_color(roller, LV_PALETTE_GREEN, LV_PART_SELECTED);
     }   
     lv_roller_set_selected(roller, layer_select_id[state.index], LV_ANIM_ON);
