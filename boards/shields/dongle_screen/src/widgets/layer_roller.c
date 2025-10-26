@@ -29,14 +29,49 @@ static void layer_roller_set_sel(lv_obj_t *roller, struct layer_roller_state sta
 
     int display_pos = layer_select_id[state.index];
 
-    // Set color based on layer index
-    if (state.index == 1) {
-        lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_SELECTED);
-    } else if (state.index == 4) {
-        lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
+    // Set color based on position and layer
+    lv_color_t color;
+    // Get relative position from center
+    int center_pos = total_layers / 2;
+    int rel_pos = display_pos - center_pos;
+
+    // Position-based coloring using predefined colors
+    if (display_pos == center_pos) {
+        // Center (usually layer 0) - White
+        color = lv_color_white();
     } else {
-        lv_obj_set_style_text_color(roller, lv_color_white(), LV_PART_SELECTED);
+        // Colors for positions relative to center
+        static const lv_palette_t before_center[] = {
+            LV_PALETTE_DEEP_ORANGE,  // -3
+            LV_PALETTE_ORANGE,       // -2
+            LV_PALETTE_AMBER,        // -1
+        };
+        static const lv_palette_t after_center[] = {
+            LV_PALETTE_LIGHT_GREEN,  // +1
+            LV_PALETTE_GREEN,        // +2
+            LV_PALETTE_TEAL,         // +3
+        };
+        
+        if (rel_pos < 0) {
+            // Before center (negative positions)
+            int idx = (-rel_pos) - 1;
+            if (idx < sizeof(before_center)/sizeof(before_center[0])) {
+                color = lv_palette_main(before_center[idx]);
+            } else {
+                color = lv_palette_main(before_center[sizeof(before_center)/sizeof(before_center[0]) - 1]);
+            }
+        } else {
+            // After center (positive positions)
+            int idx = rel_pos - 1;
+            if (idx < sizeof(after_center)/sizeof(after_center[0])) {
+                color = lv_palette_main(after_center[idx]);
+            } else {
+                color = lv_palette_main(after_center[sizeof(after_center)/sizeof(after_center[0]) - 1]);
+            }
+        }
     }
+
+    lv_obj_set_style_text_color(roller, color, LV_PART_SELECTED);
     lv_roller_set_selected(roller, display_pos, LV_ANIM_ON);
 }
 
