@@ -12,10 +12,9 @@
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static char layer_names_buffer[256] = {0}; // Buffer for concatenated layer names
-
-static int layer_select_id[6] = {2, 4, 3, 1, 0}; // Select order of layers.
-
-static int layer_display_order[6] = {4, 3, 0, 2, 1}; // Display order of layers.
+static int layer_select_id[ZMK_KEYMAP_LAYERS_LEN] = {0};   // Maps layer index to display position
+static int layer_display_order[ZMK_KEYMAP_LAYERS_LEN] = {0}; // Maps display position to layer index
+static int total_layers = 0;
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -24,14 +23,56 @@ struct layer_roller_state {
 };
 
 static void layer_roller_set_sel(lv_obj_t *roller, struct layer_roller_state state) {
-    if (state.index == 1) {
-        lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_SELECTED);
-    } else if (state.index == 4) {
-        lv_obj_set_style_text_color(roller, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
-    } else {
-        lv_obj_set_style_text_color(roller, lv_color_white(), LV_PART_SELECTED);
+    if (state.index >= ZMK_KEYMAP_LAYERS_LEN || layer_select_id[state.index] == -1) {
+        return;
     }
-    lv_roller_set_selected(roller, layer_select_id[state.index], LV_ANIM_ON);
+
+    int display_pos = layer_select_id[state.index];
+
+    // Set color based on position and layer
+    lv_color_t color;
+    // Get relative position from center
+    int center_pos = total_layers / 2;
+    int rel_pos = display_pos - center_pos;
+
+    // Position-based coloring using predefined colors
+    if (display_pos == center_pos) {
+        // Center (usually layer 0) - White
+        color = lv_color_white();
+    } else {
+        // Colors for positions relative to center
+        static const lv_palette_t before_center[] = {
+            LV_PALETTE_DEEP_ORANGE,  // -3
+            LV_PALETTE_ORANGE,       // -2
+            LV_PALETTE_AMBER,        // -1
+        };
+        static const lv_palette_t after_center[] = {
+            LV_PALETTE_LIGHT_GREEN,  // +1
+            LV_PALETTE_GREEN,        // +2
+            LV_PALETTE_TEAL,         // +3
+        };
+        
+        if (rel_pos < 0) {
+            // Before center (negative positions)
+            int idx = (-rel_pos) - 1;
+            if (idx < sizeof(before_center)/sizeof(before_center[0])) {
+                color = lv_palette_main(before_center[idx]);
+            } else {
+                color = lv_palette_main(before_center[sizeof(before_center)/sizeof(before_center[0]) - 1]);
+            }
+        } else {
+            // After center (positive positions)
+            int idx = rel_pos - 1;
+            if (idx < sizeof(after_center)/sizeof(after_center[0])) {
+                color = lv_palette_main(after_center[idx]);
+            } else {
+                color = lv_palette_main(after_center[sizeof(after_center)/sizeof(after_center[0]) - 1]);
+            }
+        }
+    }
+
+    lv_obj_set_style_text_color(roller, color, LV_PART_SELECTED);
+    lv_roller_set_selected(roller, display_pos, LV_ANIM_ON);
 }
 
 static void layer_roller_update_cb(struct layer_roller_state state) {
@@ -104,7 +145,63 @@ static void mask_event_cb(lv_event_t * e)
     }
 }
 
+static void init_layer_arrays(void) {
+    static bool initialized = false;
+    if (initialized) {
+        return; // Already initialized
+    }
+    initialized = true;
+
+    // Count available layers
+    total_layers = 0;
+    for (int i = 0; i < ZMK_KEYMAP_LAYERS_LEN; i++) {
+        if (zmk_keymap_layer_name(i) != NULL) {
+            total_layers++;
+        }
+    }
+
+    // Initialize arrays with invalid values
+    for (int i = 0; i < ZMK_KEYMAP_LAYERS_LEN; i++) {
+        layer_select_id[i] = -1;
+        layer_display_order[i] = -1;
+    }
+
+    // Initialize arrays with layer 0 in the center
+    int center_pos = total_layers / 2;
+    
+    // Place layer 0 in the center
+    layer_display_order[center_pos] = 0;
+    layer_select_id[0] = center_pos;
+    
+    // Fill positions before center with odd numbers
+    int odd = 1;
+    for (int i = center_pos - 1; i >= 0; i--) {
+        if (odd < total_layers) {
+            layer_display_order[i] = odd;
+            layer_select_id[odd] = i;
+            odd += 2;
+        }
+    }
+    
+    // Fill positions after center with even numbers
+    int even = 2;
+    for (int i = center_pos + 1; i < total_layers; i++) {
+        if (even < total_layers) {
+            layer_display_order[i] = even;
+            layer_select_id[even] = i;
+            even += 2;
+        }
+    }
+
+    LOG_DBG("Layer display order:");
+    for (int i = 0; i < total_layers; i++) {
+        LOG_DBG("Position %d: Layer %d", i, layer_display_order[i]);
+    }
+}
+
 int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_t *parent) {
+    init_layer_arrays();
+
     widget->obj = lv_roller_create(parent);
     lv_obj_set_size(widget->obj, 240, 80);
 
@@ -131,8 +228,8 @@ int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_
     layer_names_buffer[0] = '\0';
     char *ptr = layer_names_buffer;
 
-    for (int i = 0; i < ZMK_KEYMAP_LAYERS_LEN; i++) {
-        const char *layer_name = zmk_keymap_layer_name(zmk_keymap_layer_index_to_id(layer_display_order[i]));
+    for (int i = 0; i < total_layers; i++) {
+        const char *layer_name = zmk_keymap_layer_name(layer_display_order[i]);
         if (layer_name) {
 
             // For each layer name after the first layer name and a newline.
