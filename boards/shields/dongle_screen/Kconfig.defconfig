@@ -54,8 +54,8 @@ endchoice
 config LV_COLOR_16_SWAP
 	default y
 
-config LV_DISP_DEF_REFR_PERIOD
-    default 33
+# config LV_DISP_DEF_REFR_PERIOD
+#    default 33
 
 choice LV_FONT_DEFAULT
     default LV_FONT_DEFAULT_MONTSERRAT_20
