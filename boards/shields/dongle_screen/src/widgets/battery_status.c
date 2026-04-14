@@ -69,47 +69,31 @@ static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
 }
 
 /* LVGL v9 draw event */
-static void event_cb(lv_event_t *e) {
+static void event_cb(lv_event_t *e)
+{
     lv_draw_task_t *draw_task = lv_event_get_draw_task(e);
     if (!draw_task) return;
 
-    lv_draw_dsc_base_t *base_dsc = lv_draw_task_get_draw_dsc(draw_task);
-    if (base_dsc->part != LV_PART_INDICATOR) return;
+    lv_draw_dsc_base_t *base = lv_draw_task_get_draw_dsc(draw_task);
+    if (!base || base->part != LV_PART_INDICATOR) return;
 
     lv_obj_t *obj = lv_event_get_target(e);
-
-    lv_draw_label_dsc_t label_dsc;
-    lv_draw_label_dsc_init(&label_dsc);
-    label_dsc.font = LV_FONT_DEFAULT;
 
     char buf[8];
     lv_snprintf(buf, sizeof(buf), "%d", (int)lv_bar_get_value(obj));
 
-    lv_point_t txt_size;
-    lv_text_get_size(&txt_size, buf, label_dsc.font,
-                     label_dsc.letter_space,
-                     label_dsc.line_space,
-                     LV_COORD_MAX,
-                     label_dsc.flag);
+    lv_draw_label_dsc_t dsc;
+    lv_draw_label_dsc_init(&dsc);
 
-    lv_area_t txt_area;
-    lv_area_t *draw_area = lv_draw_task_get_draw_dsc(draw_task);
+    /* ✅ Correct way to get draw area */
+    const lv_area_t *area = lv_draw_task_get_area(draw_task);
 
-    if (lv_area_get_width(draw_area) > txt_size.x + 20) {
-        txt_area.x2 = draw_area->x2 - 5;
-        txt_area.x1 = txt_area.x2 - txt_size.x + 1;
-        label_dsc.color = lv_color_white();
-    } else {
-        txt_area.x1 = draw_area->x2 + 5;
-        txt_area.x2 = txt_area.x1 + txt_size.x - 1;
-        label_dsc.color = lv_color_black();
-    }
+    /* ✅ Correct way to get draw context */
+    lv_draw_ctx_t *draw_ctx = lv_draw_task_get_draw_ctx(draw_task);
 
-    txt_area.y1 = draw_area->y1 +
-                  (lv_area_get_height(draw_area) - txt_size.y) / 2;
-    txt_area.y2 = txt_area.y1 + txt_size.y - 1;
+    if (!area || !draw_ctx) return;
 
-    lv_draw_label(lv_draw_task_get_draw_dsc(draw_task)->draw_ctx, &label_dsc, &txt_area, buf, NULL);
+    lv_draw_label(draw_ctx, &dsc, area, buf, NULL);
 }
 
 /* Helper for battery color */
