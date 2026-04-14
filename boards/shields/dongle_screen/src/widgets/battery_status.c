@@ -109,7 +109,7 @@ static void event_cb(lv_event_t *e) {
                   (lv_area_get_height(draw_area) - txt_size.y) / 2;
     txt_area.y2 = txt_area.y1 + txt_size.y - 1;
 
-    lv_draw_label(draw_task->draw_ctx, &label_dsc, &txt_area, buf, NULL);
+    lv_draw_label(lv_draw_task_get_draw_dsc(draw_task)->draw_ctx, &label_dsc, &txt_area, buf, NULL);
 }
 
 /* Helper for battery color */
