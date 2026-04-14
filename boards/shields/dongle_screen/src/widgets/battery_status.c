@@ -93,7 +93,7 @@ static void event_cb(lv_event_t *e) {
                      label_dsc.flag);
 
     lv_area_t txt_area;
-    lv_area_t *draw_area = lv_draw_task_get_draw_dsc(task);
+    lv_area_t *draw_area = lv_draw_task_get_draw_dsc(draw_task);
 
     if (lv_area_get_width(draw_area) > txt_size.x + 20) {
         txt_area.x2 = draw_area->x2 - 5;
