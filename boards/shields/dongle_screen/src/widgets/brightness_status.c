@@ -6,7 +6,7 @@
 
 static void brightness_status_timer_cb(lv_timer_t *timer)
 {
-    struct zmk_widget_brightness_status *widget = (struct zmk_widget_brightness_status *)timer->user_data;
+    struct zmk_widget_brightness_status *widget = (struct zmk_widget_brightness_status *)lv_timer_get_user_data(timer);
     if (widget && widget->obj) {
         lv_obj_add_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
     }
@@ -23,7 +23,7 @@ int zmk_widget_update_brightness_status(struct zmk_widget_brightness_status *wid
     lv_obj_clear_flag(widget->obj, LV_OBJ_FLAG_HIDDEN);
 
     // Start a one-shot timer to hide the widget after 300ms
-    lv_timer_t *timer = lv_timer_create(brightness_status_timer_cb, BRIGHTNESS_STATUS_HIDE_DELAY_MS, widget);
+    lv_timer_t * timer = lv_timer_create(brightness_status_timer_cb, BRIGHTNESS_STATUS_HIDE_DELAY_MS, widget);
     lv_timer_set_repeat_count(timer, 1);
 
     return 0;
