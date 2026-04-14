@@ -85,7 +85,7 @@ static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
 
 static void event_cb(lv_event_t * e)
 {
-    lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
+    lv_draw_dsc_base_t * dsc = lv_draw_task_get_draw_dsc(e);
     if(dsc->part != LV_PART_INDICATOR) return;
 
     lv_obj_t * obj = lv_event_get_target(e);
