@@ -86,14 +86,16 @@ static void event_cb(lv_event_t *e)
     lv_draw_label_dsc_init(&dsc);
 
     /* ✅ Correct way to get draw area */
-    const lv_area_t *area = lv_draw_task_get_area(draw_task, &area);
+    lv_area_t draw_task_area;
+    lv_draw_task_get_area(draw_task, &draw_task_area);
 
     /* ✅ Correct way to get draw context */
-    lv_draw_ctx_t *draw_ctx = lv_draw_task_get_draw_ctx(draw_task);
+    lv_draw_ctx_t draw_ctx;
+    lv_draw_task_get_draw_ctx(draw_task);
 
-    if (!area || !draw_ctx) return;
+    if (!draw_task_area || !draw_ctx) return;
 
-    lv_draw_label(draw_ctx, &dsc, area, buf, NULL);
+    lv_draw_label(draw_ctx, &dsc, draw_task_area, buf, NULL);
 }
 
 /* Helper for battery color */
